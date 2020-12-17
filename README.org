@@ -1,0 +1,7 @@
+#+title: Tensor Interoperability Standard
+
+#+begin_src c++
+T["einst"]
+#+end_src
+
+* TODO Introduction
