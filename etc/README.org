@@ -1,0 +1,107 @@
+#+TITLE: Makefile utilities
+
+* T["einst"]
+
+  There are Makefiles in different directories. We need to set the
+  root of the =T["einst"]= installation. We can use git to achieve this.
+   #+begin_src makefile  :comments link  :tangle teinst_vars.mk  
+TEINST_ROOT=$(shell git rev-parse --show-toplevel)
+   #+end_src
+  
+* CTF
+  
+** CTF variables
+
+   We define here the variables relative to CTF. These will be used by
+   other Makefiles that will need the path to the CTF installation
+   to find the =libctf.a= library and the header files in the
+   =include= directory.
+   
+   #+begin_src makefile  :comments link  :tangle ctf_vars.mk  
+CTF_REPOSITORY = https://github.com/cyclops-community/ctf
+CTF_COMMIT    ?= v1.5.0
+
+CTF_SRC_PATH     = $(TEINST_ROOT)/lib/src/ctf/$(CTF_COMMIT)
+CTF_BUILD_PATH   = $(TEINST_ROOT)/lib/build/ctf/$(CTF_COMMIT)
+
+CTF_CONFIG_FLAGS =
+
+CTF_STATIC_LIB   = $(CTF_BUILD_PATH)/lib/libctf.a
+CTF_INCLUDE_PATH = $(CTF_BUILD_PATH)/include
+   #+end_src
+        
+** CTF rules
+
+   This Makefile can fetch CTF via the GitHub repository and build it.
+   The build directory is specified in the =ctf_variables.mk= file
+   
+   #+begin_src makefile  :comments link  :tangle ctf_rules.mk
+$(CTF_SRC_PATH)/configure:
+	mkdir -p $(@D)
+	git clone $(CTF_REPOSITORY) $(@D)
+	cd $(@D) && git checkout $(CTF_COMMIT)
+
+$(CTF_BUILD_PATH)/Makefile: $(CTF_SRC_PATH)/configure
+	mkdir -p $(CTF_BUILD_PATH)
+	cd $(CTF_BUILD_PATH) && $(CTF_SRC_PATH)/configure $(CTF_CONFIG_FLAGS)
+
+$(CTF_STATIC_LIB): $(CTF_BUILD_PATH)/Makefile
+	$(info Compiling $@)
+	cd $(CTF_BUILD_PATH) && $(MAKE)
+
+.PHONY: ctf ctf-clean
+ctf: $(CTF_STATIC_LIB)
+
+ctf-clean:
+	rm -rf $(CTF_BUILD_PATH)
+
+IN_PROJECT_DEPENDENCIES += ctf
+   #+end_src
+
+
+* TODO libtensor
+
+ # TODO : Only the skeleton was made here. The content needs to be updated
+
+** TODO libtensor variables
+
+   #+begin_src makefile  :comments link  :tangle libtensor_vars.mk  
+LIBTENSOR_REPOSITORY = 
+LIBTENSOR_COMMIT    ?= 
+
+LIBTENSOR_SRC_PATH     = $(TEINST_ROOT)/lib/src/libtensor/$(LIBTENSOR_COMMIT)
+LIBTENSOR_BUILD_PATH   = $(TEINST_ROOT)/lib/build/libtensor/$(LIBTENSOR_COMMIT)
+
+LIBTENSOR_CONFIG_FLAGS =
+
+LIBTENSOR_STATIC_LIB   = $(LIBTENSOR_BUILD_PATH)/lib/libtensor.a
+LIBTENSOR_INCLUDE_PATH = $(LIBTENSOR_BUILD_PATH)/include
+   #+end_src
+        
+** TODO libtensor rules
+
+   This Makefile can fetch libtensor via the GitHub repository and build it.
+   The build directory is specified in the =libtensor_variables.mk= file
+   
+   #+begin_src makefile  :comments link  :tangle libtensor_rules.mk
+$(LIBTENSOR_SRC_PATH)/configure:
+	mkdir -p $(@D)
+	git clone $(LIBTENSOR_REPOSITORY) $(@D)
+	cd $(@D) && git checkout $(LIBTENSOR_COMMIT)
+
+$(LIBTENSOR_BUILD_PATH)/Makefile: $(LIBTENSOR_SRC_PATH)/configure
+	mkdir -p $(LIBTENSOR_BUILD_PATH)
+	cd $(LIBTENSOR_BUILD_PATH) && $(LIBTENSOR_SRC_PATH)/configure $(LIBTENSOR_CONFIG_FLAGS)
+
+$(LIBTENSOR_STATIC_LIB): $(LIBTENSOR_BUILD_PATH)/Makefile
+	$(info Compiling $@)
+	cd $(LIBTENSOR_BUILD_PATH) && $(MAKE)
+
+.PHONY: libtensor libtensor-clean
+libtensor: $(LIBTENSOR_STATIC_LIB)
+
+libtensor-clean:
+	rm -rf $(LIBTENSOR_BUILD_PATH)
+
+IN_PROJECT_DEPENDENCIES += libtensor
+   #+end_src

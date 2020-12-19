@@ -7,7 +7,7 @@ T["einst"]
 * Introduction
 
 This project is an effort to standardize the usage of Tensor Frameworks (TF)
-by defining a common Application programming interface (API).
+by defining a common application programming interface (API).
 One of the main goals is to ease the creation of bindings for diverse
 programming languages. Most TF are written in C++ and make extensive use
 of generic programming through C++ templates. This in turn makes creating
@@ -41,7 +41,7 @@ E_\mathrm{CC}
 In this example we will illustrate how one uses the library
 [[https://github.com/cyclops-community/ctf][Cyclops Tensor Framework]] (CTF).
 
-#+begin_src c++
+#+begin_src c++  :comments link  :tangle examples/cc_ctf.cpp 
 #include <mpi.h>
 #include <ctf.hpp>
 
@@ -80,9 +80,13 @@ int main() {
 #+end_src
 
 * TODO
-- [X] Write a makefile file to download and compile ~CTF~.
-- [ ] Write a makefile target to compile and run examples.
-- [X] Define an example to do basic full contraction.
-- [ ] Define an example to do slicing.
-- [ ] Define an example to apply map function to values of a tensor.
-- [ ] Define an example to define sparse tensors.
+  - [X] Write a makefile file to download and compile ~CTF~.
+  - [ ] Write a makefile file to download and compile ~libtensor~.
+  - [ ] Write a makefile file to download and compile ~tiledarray~.
+  - [ ] Write a makefile target to compile and run examples.
+  - [X] Define an example to do basic full contraction.
+  - [ ] Define an example to do slicing.
+  - [ ] Define an example to apply map function to values of a tensor.
+  - [ ] Define an example to define sparse tensors.
+
+  

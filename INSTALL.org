@@ -1,0 +1,6 @@
+* TODO Requirements
+
+ - git
+ - GNU make
+ - C++ Compiler
+ - MPI

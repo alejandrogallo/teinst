@@ -1,12 +1,7 @@
-CTF_COMMIT ?= v1.5.0
-CTF_SRC_PATH   = $(abspath lib/src/ctf/$(CTF_COMMIT))
-CTF_BUILD_PATH = $(abspath lib/build/ctf/$(CTF_COMMIT))
-CTF_CONFIG_FLAGS =
-CTF_STATIC_LIB = $(CTF_BUILD_PATH)/lib/libctf.a
-
+# [[file:README.org::*CTF rules][CTF rules:1]]
 $(CTF_SRC_PATH)/configure:
 	mkdir -p $(@D)
-	git clone https://github.com/cyclops-community/ctf $(@D)
+	git clone $(CTF_REPOSITORY) $(@D)
 	cd $(@D) && git checkout $(CTF_COMMIT)
 
 $(CTF_BUILD_PATH)/Makefile: $(CTF_SRC_PATH)/configure
@@ -24,3 +19,4 @@ ctf-clean:
 	rm -rf $(CTF_BUILD_PATH)
 
 IN_PROJECT_DEPENDENCIES += ctf
+# CTF rules:1 ends here
