@@ -4,4 +4,18 @@
 T["einst"]
 #+end_src
 
-* TODO Introduction
+* Introduction
+
+  This project is an effort to standardize the usage of Tensor Frameworks (TF)
+  by defining a common Application programming interface (API).
+  One of the main goals is to ease the creation of bindings for diverse
+  programming languages. Most TF are written in C++ and make extensive use
+  of generic programming through C++ templates. This in turn makes creating
+  bindings burdensome.
+
+  This projects aims to define a common API in the C programming language
+  which can access most basic functionality of these libraries. We choose
+  to focus on C since most programming languages provide a well supported infrastructure
+  for interfacing with C data structures.
+  This standard strives to be as general as possible, but a trade-off
+  must be waged. Therefore, not all features of TF can be made to fit in.
