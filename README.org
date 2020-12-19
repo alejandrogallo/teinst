@@ -6,16 +6,83 @@ T["einst"]
 
 * Introduction
 
-  This project is an effort to standardize the usage of Tensor Frameworks (TF)
-  by defining a common Application programming interface (API).
-  One of the main goals is to ease the creation of bindings for diverse
-  programming languages. Most TF are written in C++ and make extensive use
-  of generic programming through C++ templates. This in turn makes creating
-  bindings burdensome.
+This project is an effort to standardize the usage of Tensor Frameworks (TF)
+by defining a common Application programming interface (API).
+One of the main goals is to ease the creation of bindings for diverse
+programming languages. Most TF are written in C++ and make extensive use
+of generic programming through C++ templates. This in turn makes creating
+bindings burdensome.
 
-  This projects aims to define a common API in the C programming language
-  which can access most basic functionality of these libraries. We choose
-  to focus on C since most programming languages provide a well supported infrastructure
-  for interfacing with C data structures.
-  This standard strives to be as general as possible, but a trade-off
-  must be waged. Therefore, not all features of TF can be made to fit in.
+This projects aims to define a common API in the C programming language
+which can access most basic functionality of these libraries. We choose
+to focus on C since most programming languages provide a well supported infrastructure
+for interfacing with C data structures.
+This standard strives to be as general as possible, but a trade-off
+must be waged. Therefore, not all features of TF can be made to fit in.
+
+* Examples
+  
+This section should be a compilation of use cases that should motivate
+the definition of the API. The goal is to define a series of general
+examples and implement them using the API of different TF.
+
+** Example 1: Coupled Cluster Energy
+
+In this example we will consider the calculation of the simple coupled
+cluster energy.
+
+\begin{equation}
+E_\mathrm{CC}
+  = \frac{1}{4} \sum_{a, b, i, j} T^{ab}_{ij} V^{ij}_{ab}
+\end{equation}
+
+*** CTF
+
+In this example we will illustrate how one uses the library
+[[https://github.com/cyclops-community/ctf][Cyclops Tensor Framework]] (CTF).
+
+#+begin_src c++
+#include <mpi.h>
+#include <ctf.hpp>
+
+template <typename F> using T = CTF::Tensor<F>;
+template <typename F> using S = CTF::Scalar<F>;
+
+template <typename F>
+F ccEnergy(T<F> &t, T<F> &vhhpp) {
+  S<F> energy;
+  energy[""] = (0.25)
+             ,* t["abij"]
+             ,* vijab["ijab"]
+             ;
+  return energy.get_val();
+}
+
+int main() {
+
+  int no(20)
+    , nv(200)
+    , order(4)
+    , symmetries[] = {NS, NS, NS, NS}
+    , lensT[] = {nv, nv, no, no}
+    , lensV[] = {no, no, nv, nv}
+    ;
+
+  auto T<double>(order, symmetries, lensT, MPI_COMM_WORLD)
+     , V<double>(order, symmetries, lensV, MPI_COMM_WORLD)
+     ;
+
+  double e(ccEnergy(T, V));
+  std::cout << "Energy " << e << std::endl;
+
+}
+
+#+end_src
+
+* TODO
+- [X] Write a makefile file to download and compile ~CTF~.
+- [ ] Write a makefile target to compile and run examples.
+- [X] Define an example to do basic full contraction.
+- [ ] Define an example to do slicing.
+- [ ] Define an example to apply map function to values of a tensor.
+- [ ] Define an example to define sparse tensors.
