@@ -90,3 +90,50 @@ int main() {
   - [ ] Define an example to define sparse tensors.
 
   
+* TODO Propositions
+
+** Names
+   - Prefix library functions by ~teinst_~
+   - Use  ~s~, ~d~, and ~z~ for ~real~, ~double~ and ~complex~ types
+   - Use a marker in the name to indicate if an operation is in-place.
+     I think the default should be to have one output-only parameter and
+     multiple const input-only parameters to functions.
+
+** Types
+   - Dimensioning variables should /always/ be given as int64
+   - Use only the C native types in the API. If a struct is needed,
+     return a pointer and provide functions to interact with the struct
+   
+** Behavior and source code
+   - Return a return code ~TEINST_SUCCESS~ or ~TEINST_FAILURE~ for
+     every function call
+   - Do not allocate temporary memory, let the user pass some pointers
+     to allocated memory
+   - Test preconditions and post-conditions with asserts in all functions.
+     For example, test if dimensions are compatible and if the tensors
+     point to allocated memory. We can also provide unsafe versions which
+     don't do the checks, such that the safe version
+     1. tests the pre-conditions
+     2. call the unsafe function
+     3. tests the post-conditions
+   - Provide a test for each function
+   - All operations are deep (copies, allocations, etc)
+   - If we have some data structures, we should make it impossible to
+     have them incompletely filled
+   - Use ~const~ whenever possible
+   - All functions should be independent of the context
+
+** Functions to write
+   - Convert scalars and arrays to tensors, and backwards (copy)
+   - Allocate and return a pointer
+   - Free the tensor
+   - Test if a pointer points on an allocated tensor
+   - Contractions
+   - Add, subtract, multiply and divide element-wise along selected directions
+   - Slicing
+   - Map function
+
+
+  #+begin_src c
+return_code = teinst_dcontr(E, "", T, "abij", V, "ijab", 0.25);
+  #+end_src
