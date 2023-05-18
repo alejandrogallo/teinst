@@ -1,5 +1,6 @@
 include(common.m4)dnl
-include(api/init_tensor.m4)dnl
+include(api/tensor_init.m4)dnl
+include(api/tensor_free.m4)dnl
 dnl
 dnl
 #pragma once
@@ -11,7 +12,16 @@ extern "C" {
 
   typedef size_t tensor_h;
 
-  m4_instantiate_types(`m4_init_tensor_header', ;)
+/*
+ * Initialize Tensor
+ */
+  m4_instantiate_types(`m4_tensor_init_header', ;)
+
+
+/*
+ * Free tensor
+ */
+  m4_instantiate_types(`m4_tensor_free_header', ;)
 
   void tensor_name(tensor_h, char** name);
 

@@ -1,5 +1,6 @@
 include(common.m4)dnl
-include(api/init_tensor.m4)dnl
+include(api/tensor_init.m4)dnl
+include(api/tensor_free.m4)dnl
 dnl
 dnl
 #include <backend/ctf.hpp>
@@ -10,7 +11,8 @@ dnl
 
     extern "C" {
 
-m4_instantiate_types(`m4_init_tensor_implementation', ;)
+m4_instantiate_types(`m4_tensor_init_implementation', ;)
+m4_instantiate_types(`m4_tensor_free_implementation', ;)
 
 void tensor_name(tensor_h t, char** nameptr) {
     const std::string name =
