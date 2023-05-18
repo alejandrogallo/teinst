@@ -1,5 +1,5 @@
 CTF_PATH= ../software/atrip/build/extern/ctf/
-M4_SOURCES = $(wildcard *m4)
+M4_SOURCES = $(shell find . -name '*m4')
 CXXFLAGS = -pedantic -Wall -Wextra -g -fmax-errors=1
 CXX = mpic++ $(CXXFLAGS)
 
