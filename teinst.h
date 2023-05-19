@@ -9,6 +9,18 @@ extern "C" {
 
 typedef size_t tensor_h;
 
+void global_world_init();
+void global_world_free();
+
+/*
+ * Get lengths of the tensor
+ */
+
+void tensor_lengths_s(const tensor_h t, size_t **lengths);
+void tensor_lengths_d(const tensor_h t, size_t **lengths);
+void tensor_lengths_c(const tensor_h t, size_t **lengths);
+void tensor_lengths_z(const tensor_h t, size_t **lengths);
+
 /*
  * Initialize Tensor
  */

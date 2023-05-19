@@ -3,10 +3,16 @@ M4_SOURCES = $(shell find . -name '*m4')
 CXXFLAGS = -fopenmp -pedantic -Wall -Wextra -g -fmax-errors=1
 CXX = mpic++ $(CXXFLAGS)
 
+CTF_CPATH = -I$(CTF_PATH)/include
+CTF_LIBS = $(CTF_PATH)/lib/libctf.a -lopenblas -lscalapack
+
 .PHONY: all m4
-all: libteinst.so
+all: libteinst.so test
 
 m4: teinst.cxx teinst.h
+
+test: test.c libteinst.so
+	mpicc -I. $(CXXFLAGS) test.c -o test -L. -lteinst
 
 teinst.cxx: $(M4_SOURCES)
 teinst.h: $(M4_SOURCES)
@@ -18,10 +24,10 @@ teinst.h: $(M4_SOURCES)
 	clang-format -i $@
 
 teinst.o: teinst.cxx teinst.h
-	$(CXX) -fPIC -c -I. -I$(CTF_PATH)/include teinst.cxx
+	$(CXX) -fPIC -c -I. $(CTF_CPATH) teinst.cxx
 
 libteinst.so: teinst.o
-	$(CXX) -fPIC -shared -fopenmp -o $@ $< $(CTF_PATH)/lib/libctf.a -lopenblas -lscalapack
+	$(CXX) -fPIC -shared -fopenmp -o $@ $< $(CTF_LIBS)
 
 clean:
 	-rm *o
