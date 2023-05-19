@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <mpi.h>
 #include <stdio.h>
 #include <teinst.h>
@@ -20,6 +21,14 @@ int main(int argc, char **argv) {
     tensor_lengths_s(tsr, &_lenghts);
     printf("got lengths = {%ld %ld %ld %ld}\n", _lenghts[0], _lenghts[1],
            _lenghts[2], _lenghts[3]);
+    size_t i = 0;
+    assert(lens[i] == _lenghts[i]);
+    i++;
+    assert(lens[i] == _lenghts[i]);
+    i++;
+    assert(lens[i] == _lenghts[i]);
+    i++;
+    assert(lens[i] == _lenghts[i]);
 
     printf("Freeing <%p>\n", (void *)tsr);
     tensor_free_s(tsr);
