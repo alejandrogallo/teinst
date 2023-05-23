@@ -45,15 +45,6 @@ void tensor_init_z(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths);
 
-size_t* tensor_lengths_r_s(const tensor_h t,
-                                 size_t dimension);
-size_t* tensor_lengths_r_d(const tensor_h t,
-                                 size_t dimension);
-size_t* tensor_lengths_r_c(const tensor_h t,
-                                 size_t dimension);
-size_t* tensor_lengths_r_z(const tensor_h t,
-                                 size_t dimension);
-
 void tensor_lengths_s(const tensor_h t,
                                  size_t dimension,
                                  size_t* lengths);

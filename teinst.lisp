@@ -1,7 +1,8 @@
 (in-package :teinst)
 
-(defconstant +supported-field-types+
-  '(member :float :double-float :complex :double-complex))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+    (defparameter *supported-field-types*
+      '(member :float :double-float :complex :double-complex)))
 
 (defun make-tensor-handle (type &key (lengths #()))
   (check-type lengths simple-array)
@@ -19,7 +20,7 @@
 (defclass tensor ()
   ((lengths :type list :initarg :lengths :reader tensor-lengths)
    (handle :type (or null foreign-pointer) :initarg :handle :initform nil)
-   (type :type #.+supported-field-types+
+   (type :type #.*supported-field-types*
          :initarg :type
          :reader tensor-type)))
 

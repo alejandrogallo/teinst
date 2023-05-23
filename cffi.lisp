@@ -49,23 +49,6 @@ has 3 dimensions.
   (ndim :size)
   (lengths (:pointer :size)))
 
-(defcfun ("tensor_lengths_r_s" %tensor-lengths-r-s)
-    :pointer
-  (tsr tensor-h)
-  (dimension :size))
-(defcfun ("tensor_lengths_r_d" %tensor-lengths-r-d)
-    :pointer
-  (tsr tensor-h)
-  (dimension :size))
-(defcfun ("tensor_lengths_r_c" %tensor-lengths-r-c)
-    :pointer
-  (tsr tensor-h)
-  (dimension :size))
-(defcfun ("tensor_lengths_r_z" %tensor-lengths-r-z)
-    :pointer
-  (tsr tensor-h)
-  (dimension :size))
-
 (defcfun ("tensor_lengths_s" %tensor-lengths-s) :void
   (tsr tensor-h)
   (dimension :size)

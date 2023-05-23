@@ -94,47 +94,6 @@ void tensor_init_z(tensor_h* t,
   *t = reinterpret_cast<tensor_h>(_t);
 }
 
-size_t* tensor_lengths_r_s(const tensor_h t,
-                                 size_t dimension) {
-  using F = float;
-  auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
-  auto lengths = (size_t*)malloc(sizeof(size_t) * dimension);
-  for (size_t i = 0; i < dimension; i++) {
-    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
-  }
-  return lengths;
- }
-size_t* tensor_lengths_r_d(const tensor_h t,
-                                 size_t dimension) {
-  using F = double;
-  auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
-  auto lengths = (size_t*)malloc(sizeof(size_t) * dimension);
-  for (size_t i = 0; i < dimension; i++) {
-    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
-  }
-  return lengths;
- }
-size_t* tensor_lengths_r_c(const tensor_h t,
-                                 size_t dimension) {
-  using F = std::complex<float>;
-  auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
-  auto lengths = (size_t*)malloc(sizeof(size_t) * dimension);
-  for (size_t i = 0; i < dimension; i++) {
-    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
-  }
-  return lengths;
- }
-size_t* tensor_lengths_r_z(const tensor_h t,
-                                 size_t dimension) {
-  using F = std::complex<double>;
-  auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
-  auto lengths = (size_t*)malloc(sizeof(size_t) * dimension);
-  for (size_t i = 0; i < dimension; i++) {
-    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
-  }
-  return lengths;
- }
-
 void tensor_lengths_s(const tensor_h t,
                                  size_t dimension,
                                  size_t* lengths) {
