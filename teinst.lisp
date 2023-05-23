@@ -75,7 +75,8 @@
 
 (defun init ()
   (mpi-init)
-  (%global-world-init))
+  (%global-world-init)
+  t)
 
 
 (let ((a (make-array 50
