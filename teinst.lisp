@@ -1,24 +1,25 @@
 (in-package :teinst)
 
+(defconstant +supported-field-types+
+  '(member :float :double-float :complex :double-complex))
 
 (defun make-tensor-handle (type &key (lengths #()))
   (check-type lengths simple-array)
-  (let ((size-t-size (cffi:foreign-type-size :size))
-        (dim (length lengths)))
-    (with-foreign-pointer (tsr size-t-size)
-      (with-foreign-array (%lens lengths `(:array :size ,dim))
-        (ecase type
-          (:float (%tensor-init-s tsr dim %lens))
-          (:double-float (%tensor-init-d tsr dim %lens))
-          (:complex (%tensor-init-c tsr dim %lens))
-          (:double-complex (%tensor-init-z tsr dim %lens)))
-        tsr))))
+  (let ((dim (length lengths))
+        (tsr (foreign-alloc :pointer)))
+    (with-foreign-array (%lens lengths `(:array :size ,dim))
+      (ecase type
+        (:float (%tensor-init-s tsr dim %lens))
+        (:double-float (%tensor-init-d tsr dim %lens))
+        (:complex (%tensor-init-c tsr dim %lens))
+        (:double-complex (%tensor-init-z tsr dim %lens)))
+      (mem-ref tsr :pointer 0))))
 
 
 (defclass tensor ()
   ((lengths :type list :initarg :lengths :reader tensor-lengths)
    (handle :type (or null foreign-pointer) :initarg :handle :initform nil)
-   (type :type (member :float :double-float :complex :double-complex)
+   (type :type #.+supported-field-types+
          :initarg :type
          :reader tensor-type)))
 

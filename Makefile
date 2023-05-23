@@ -1,42 +1,33 @@
 CTF_PATH= ../software/atrip/build/extern/ctf/
-M4_SOURCES = $(shell find . -name '*m4')
 CXXFLAGS = -fopenmp -pedantic -Wall -Wextra -g -fmax-errors=1
 CXX = mpic++ $(CXXFLAGS)
-OPTIMIZATION ?= -O3 -g
+OPTIMIZATION ?= -O0 -g
 
-CTF_CPATH = -I$(CTF_PATH)/include
+CTF_CPATH_ARGS = -I$(CTF_PATH)/include
 CTF_LIBS = $(CTF_PATH)/lib/libctf.a -lopenblas -lscalapack
 
-.PHONY: all
+.PHONY: all test
 all: libteinst.so test
 
-m4: teinst.cxx teinst.h
+test: c-test
+	./c-test
+	mpirun -np 4 ./c-test
 
-test: test.c libteinst.so
-	mpicc -O0 -g -I. $(CXXFLAGS) test.c -o test -L. -lteinst
-
-# teinst.cxx: $(M4_SOURCES)
-# teinst.h: $(M4_SOURCES)
-# 	m4 $@.m4 > $@
-# 	clang-format -i $@
+c-test: test.c libteinst.so
+	mpicc -O0 -g -I. $(CXXFLAGS) test.c -o c-test -L. -lteinst
 
 teinst.cxx: teinst.h
 teinst.h: readme.org
 	emacs --batch -Q readme.org --load build.el
 
-# %: %.m4
-# 	m4 $< > $@
-# 	clang-format -i $@
-
 teinst.o: teinst.cxx teinst.h
-	$(CXX) $(OPTIMIZATION) -fPIC -c -I. $(CTF_CPATH) teinst.cxx
+	$(CXX) $(OPTIMIZATION) -fPIC -c -I. $(CTF_CPATH_ARGS) teinst.cxx
 
 libteinst.so: teinst.o
 	$(CXX) $(OPTIMIZATION) -fPIC -shared -fopenmp -o $@ $< $(CTF_LIBS)
 
 instantiate:
 	./tools/field-instantiate.sh templates/$(TEMPLATE)
-
 
 clean:
 	-rm *o

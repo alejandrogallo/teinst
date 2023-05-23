@@ -12,3 +12,7 @@
 (defun mpi-init ()
   (%mpi-init (null-pointer)
              (null-pointer)))
+
+(defcfun ("MPI_Comm_size" %mpi-comm-size) :void
+  (world :int)
+  (np (:pointer :int)))

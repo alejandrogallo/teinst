@@ -3,33 +3,39 @@
 #include <stdio.h>
 #include <teinst.h>
 
+#define LOG(...) if (!rank) printf(__VA_ARGS__);
+
 int main(int argc, char **argv) {
-  printf("TEINST TEST\n\n");
   MPI_Init(&argc, &argv);
+  int rank, np;
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  MPI_Comm_size(MPI_COMM_WORLD, &np);
+  LOG("[31mTEINST TEST[0m (:np %d :rank %d)\n\n", np, rank);
   global_world_init();
 
   size_t TEST_NUMBER = 0;
 
 {
-  printf("%ld) Running 'Simple Test' for *_s functions\n",
-         ++TEST_NUMBER);
+  LOG("%ld) Running [36m'Simple Test'[0m for [33m*_s[0m functions\n",
+      ++TEST_NUMBER);
 
   size_t n = 4;
+  size_t _lenghts[4];
   size_t lens[] = {1UL + TEST_NUMBER,
                    2UL + TEST_NUMBER,
                    3UL + TEST_NUMBER,
                    4UL + TEST_NUMBER};
-  size_t *_lenghts;
   char *name;
   tensor_h tsr;
 
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
   tensor_init_s(&tsr, n, lens);
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
 
-  tensor_lengths_s(tsr, &_lenghts);
-  printf("got lengths = {%ld %ld %ld %ld}\n", _lenghts[0], _lenghts[1],
-         _lenghts[2], _lenghts[3]);
+  tensor_lengths_s(tsr, n, _lenghts);
+  LOG("got lengths = {%ld %ld %ld %ld}\n", /**/
+      _lenghts[0], _lenghts[1],
+      _lenghts[2], _lenghts[3]);
   size_t i = 0;
   assert(lens[i] == _lenghts[i]); i++;
   assert(lens[i] == _lenghts[i]); i++;
@@ -37,33 +43,34 @@ int main(int argc, char **argv) {
   assert(lens[i] == _lenghts[i]);
 
   tensor_name(tsr, &name);
-  printf("got name %s for <%p>\n", name, (void *)tsr);
+  LOG("got name %s for <%p>\n", name, (void *)tsr);
 
-  printf("Freeing <%p>\n", (void *)tsr);
+  LOG("Freeing <%p>\n", (void *)tsr);
   tensor_free_s(tsr);
 
-  printf("\n\n");
+  LOG("\n\n");
 }
 {
-  printf("%ld) Running 'Simple Test' for *_d functions\n",
-         ++TEST_NUMBER);
+  LOG("%ld) Running [36m'Simple Test'[0m for [33m*_d[0m functions\n",
+      ++TEST_NUMBER);
 
   size_t n = 4;
+  size_t _lenghts[4];
   size_t lens[] = {1UL + TEST_NUMBER,
                    2UL + TEST_NUMBER,
                    3UL + TEST_NUMBER,
                    4UL + TEST_NUMBER};
-  size_t *_lenghts;
   char *name;
   tensor_h tsr;
 
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
   tensor_init_d(&tsr, n, lens);
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
 
-  tensor_lengths_d(tsr, &_lenghts);
-  printf("got lengths = {%ld %ld %ld %ld}\n", _lenghts[0], _lenghts[1],
-         _lenghts[2], _lenghts[3]);
+  tensor_lengths_d(tsr, n, _lenghts);
+  LOG("got lengths = {%ld %ld %ld %ld}\n", /**/
+      _lenghts[0], _lenghts[1],
+      _lenghts[2], _lenghts[3]);
   size_t i = 0;
   assert(lens[i] == _lenghts[i]); i++;
   assert(lens[i] == _lenghts[i]); i++;
@@ -71,33 +78,34 @@ int main(int argc, char **argv) {
   assert(lens[i] == _lenghts[i]);
 
   tensor_name(tsr, &name);
-  printf("got name %s for <%p>\n", name, (void *)tsr);
+  LOG("got name %s for <%p>\n", name, (void *)tsr);
 
-  printf("Freeing <%p>\n", (void *)tsr);
+  LOG("Freeing <%p>\n", (void *)tsr);
   tensor_free_d(tsr);
 
-  printf("\n\n");
+  LOG("\n\n");
 }
 {
-  printf("%ld) Running 'Simple Test' for *_c functions\n",
-         ++TEST_NUMBER);
+  LOG("%ld) Running [36m'Simple Test'[0m for [33m*_c[0m functions\n",
+      ++TEST_NUMBER);
 
   size_t n = 4;
+  size_t _lenghts[4];
   size_t lens[] = {1UL + TEST_NUMBER,
                    2UL + TEST_NUMBER,
                    3UL + TEST_NUMBER,
                    4UL + TEST_NUMBER};
-  size_t *_lenghts;
   char *name;
   tensor_h tsr;
 
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
   tensor_init_c(&tsr, n, lens);
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
 
-  tensor_lengths_c(tsr, &_lenghts);
-  printf("got lengths = {%ld %ld %ld %ld}\n", _lenghts[0], _lenghts[1],
-         _lenghts[2], _lenghts[3]);
+  tensor_lengths_c(tsr, n, _lenghts);
+  LOG("got lengths = {%ld %ld %ld %ld}\n", /**/
+      _lenghts[0], _lenghts[1],
+      _lenghts[2], _lenghts[3]);
   size_t i = 0;
   assert(lens[i] == _lenghts[i]); i++;
   assert(lens[i] == _lenghts[i]); i++;
@@ -105,33 +113,34 @@ int main(int argc, char **argv) {
   assert(lens[i] == _lenghts[i]);
 
   tensor_name(tsr, &name);
-  printf("got name %s for <%p>\n", name, (void *)tsr);
+  LOG("got name %s for <%p>\n", name, (void *)tsr);
 
-  printf("Freeing <%p>\n", (void *)tsr);
+  LOG("Freeing <%p>\n", (void *)tsr);
   tensor_free_c(tsr);
 
-  printf("\n\n");
+  LOG("\n\n");
 }
 {
-  printf("%ld) Running 'Simple Test' for *_z functions\n",
-         ++TEST_NUMBER);
+  LOG("%ld) Running [36m'Simple Test'[0m for [33m*_z[0m functions\n",
+      ++TEST_NUMBER);
 
   size_t n = 4;
+  size_t _lenghts[4];
   size_t lens[] = {1UL + TEST_NUMBER,
                    2UL + TEST_NUMBER,
                    3UL + TEST_NUMBER,
                    4UL + TEST_NUMBER};
-  size_t *_lenghts;
   char *name;
   tensor_h tsr;
 
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
   tensor_init_z(&tsr, n, lens);
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
 
-  tensor_lengths_z(tsr, &_lenghts);
-  printf("got lengths = {%ld %ld %ld %ld}\n", _lenghts[0], _lenghts[1],
-         _lenghts[2], _lenghts[3]);
+  tensor_lengths_z(tsr, n, _lenghts);
+  LOG("got lengths = {%ld %ld %ld %ld}\n", /**/
+      _lenghts[0], _lenghts[1],
+      _lenghts[2], _lenghts[3]);
   size_t i = 0;
   assert(lens[i] == _lenghts[i]); i++;
   assert(lens[i] == _lenghts[i]); i++;
@@ -139,15 +148,15 @@ int main(int argc, char **argv) {
   assert(lens[i] == _lenghts[i]);
 
   tensor_name(tsr, &name);
-  printf("got name %s for <%p>\n", name, (void *)tsr);
+  LOG("got name %s for <%p>\n", name, (void *)tsr);
 
-  printf("Freeing <%p>\n", (void *)tsr);
+  LOG("Freeing <%p>\n", (void *)tsr);
   tensor_free_z(tsr);
 
-  printf("\n\n");
+  LOG("\n\n");
 }
 
-  global_world_free();
+global_world_free();
   MPI_Finalize();
   return 0;
 } // main

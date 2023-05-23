@@ -9,5 +9,5 @@
   :depends-on (#:cffi)
   :components ((:file "package")
                (:file "mpi")
-               (:fille "cffi")
+               (:file "cffi")
                (:file "teinst")))

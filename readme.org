@@ -1,8 +1,9 @@
 * API
 :PROPERTIES:
 :header-args:c+++: :noweb yes :eval no
-:header-args:lisp+: :eval no
+:header-args:lisp+: :eval no :noweb yes
 :header-args:c+: :eval no
+:header-args:org+: :eval no
 :END:
 
 ** Scripts                                                         :noexport:
@@ -103,7 +104,6 @@ void global_world_init() {
 }
 
 void global_world_free() {
-  std::cout << "freeing world\n";
   if (TEINST_GLOBAL_WORLD != nullptr) {
     delete TEINST_GLOBAL_WORLD;
     TEINST_GLOBAL_WORLD = nullptr;
@@ -119,7 +119,17 @@ void global_world_free() {
 
 ** =tensor_init=
 
+#+name: tensor-init-doc
+#+begin_src org
+It will initialize the tensor handle =t= with the address of
+a valid backend tensor of kind @FIELD_NAME@.
+=ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+has 3 dimensions.
+=lengths= is an array with the size of every dimension.
+#+end_src
+
 #+begin_src c++ :noweb-ref tensor-init-header :tangle templates/tensor_init.h
+// <<tensor-init-doc>>
 void tensor_init_@FIELD_NAME@(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths)
@@ -140,8 +150,9 @@ void tensor_init_@FIELD_NAME@(tensor_h* t,
 #+end_src
 
 #+begin_src lisp :eval no :tangle templates/tensor_init.lisp 
-(defcfun ("tensor_init_@FIELD_NAME@" %tensor-init-@FIELD_NAME@)
-    :void
+(defcfun ("tensor_init_@FIELD_NAME@" %tensor-init-@FIELD_NAME@) :void
+  "
+<<tensor-init-doc>>"
   (tsr (:pointer tensor-h))
   (ndim :size)
   (lengths (:pointer :size)))
@@ -156,6 +167,11 @@ void tensor_init_@FIELD_NAME@(tensor_h* t,
 #+RESULTS:
 :results:
 #+begin_src c++ :tangle teinst.cxx
+// It will initialize the tensor handle =t= with the address of
+// a valid backend tensor of kind s.
+// =ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+// has 3 dimensions.
+// =lengths= is an array with the size of every dimension.
 void tensor_init_s(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths) {
@@ -169,6 +185,11 @@ void tensor_init_s(tensor_h* t,
                                *TEINST_GLOBAL_WORLD);
   *t = reinterpret_cast<tensor_h>(_t);
 }
+// It will initialize the tensor handle =t= with the address of
+// a valid backend tensor of kind d.
+// =ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+// has 3 dimensions.
+// =lengths= is an array with the size of every dimension.
 void tensor_init_d(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths) {
@@ -182,6 +203,11 @@ void tensor_init_d(tensor_h* t,
                                *TEINST_GLOBAL_WORLD);
   *t = reinterpret_cast<tensor_h>(_t);
 }
+// It will initialize the tensor handle =t= with the address of
+// a valid backend tensor of kind c.
+// =ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+// has 3 dimensions.
+// =lengths= is an array with the size of every dimension.
 void tensor_init_c(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths) {
@@ -195,6 +221,11 @@ void tensor_init_c(tensor_h* t,
                                *TEINST_GLOBAL_WORLD);
   *t = reinterpret_cast<tensor_h>(_t);
 }
+// It will initialize the tensor handle =t= with the address of
+// a valid backend tensor of kind z.
+// =ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+// has 3 dimensions.
+// =lengths= is an array with the size of every dimension.
 void tensor_init_z(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths) {
@@ -218,15 +249,35 @@ void tensor_init_z(tensor_h* t,
 #+RESULTS:
 :results:
 #+begin_src c++ :tangle teinst.h
+// It will initialize the tensor handle =t= with the address of
+// a valid backend tensor of kind s.
+// =ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+// has 3 dimensions.
+// =lengths= is an array with the size of every dimension.
 void tensor_init_s(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths);
+// It will initialize the tensor handle =t= with the address of
+// a valid backend tensor of kind d.
+// =ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+// has 3 dimensions.
+// =lengths= is an array with the size of every dimension.
 void tensor_init_d(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths);
+// It will initialize the tensor handle =t= with the address of
+// a valid backend tensor of kind c.
+// =ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+// has 3 dimensions.
+// =lengths= is an array with the size of every dimension.
 void tensor_init_c(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths);
+// It will initialize the tensor handle =t= with the address of
+// a valid backend tensor of kind z.
+// =ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+// has 3 dimensions.
+// =lengths= is an array with the size of every dimension.
 void tensor_init_z(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths);
@@ -240,23 +291,43 @@ void tensor_init_z(tensor_h* t,
 #+RESULTS:
 :results:
 #+begin_src lisp :tangle cffi.lisp
-(defcfun ("tensor_init_s" %tensor-init-s)
-    :void
+(defcfun ("tensor_init_s" %tensor-init-s) :void
+  "
+It will initialize the tensor handle =t= with the address of
+a valid backend tensor of kind s.
+=ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+has 3 dimensions.
+=lengths= is an array with the size of every dimension."
   (tsr (:pointer tensor-h))
   (ndim :size)
   (lengths (:pointer :size)))
-(defcfun ("tensor_init_d" %tensor-init-d)
-    :void
+(defcfun ("tensor_init_d" %tensor-init-d) :void
+  "
+It will initialize the tensor handle =t= with the address of
+a valid backend tensor of kind d.
+=ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+has 3 dimensions.
+=lengths= is an array with the size of every dimension."
   (tsr (:pointer tensor-h))
   (ndim :size)
   (lengths (:pointer :size)))
-(defcfun ("tensor_init_c" %tensor-init-c)
-    :void
+(defcfun ("tensor_init_c" %tensor-init-c) :void
+  "
+It will initialize the tensor handle =t= with the address of
+a valid backend tensor of kind c.
+=ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+has 3 dimensions.
+=lengths= is an array with the size of every dimension."
   (tsr (:pointer tensor-h))
   (ndim :size)
   (lengths (:pointer :size)))
-(defcfun ("tensor_init_z" %tensor-init-z)
-    :void
+(defcfun ("tensor_init_z" %tensor-init-z) :void
+  "
+It will initialize the tensor handle =t= with the address of
+a valid backend tensor of kind z.
+=ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+has 3 dimensions.
+=lengths= is an array with the size of every dimension."
   (tsr (:pointer tensor-h))
   (ndim :size)
   (lengths (:pointer :size)))
@@ -267,18 +338,17 @@ void tensor_init_z(tensor_h* t,
 
 #+begin_src c++ :noweb-ref tensor-lengths-header :tangle templates/tensor_lengths.h
 void tensor_lengths_@FIELD_NAME@(const tensor_h t,
-                               size_t** lengths)
+                                 size_t dimension,
+                                 size_t* lengths)
 #+end_src
 
 #+begin_src c++ :tangle templates/tensor_lengths.cxx 
 <<tensor-lengths-header>> {
   using F = @FIELD_TYPE@;
   auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
-  size_t * _v = (size_t*)malloc(sizeof(size_t) * _t->order);
-  for (size_t i = 0; i < (size_t)_t->order; i++) {
-    _v[i] = reinterpret_cast<int64_t>(_t->lens[i]);
+  for (size_t i = 0; i < dimension; i++) {
+    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
   }
-  ,*lengths = _v;
  }
 
 #+end_src
@@ -286,6 +356,7 @@ void tensor_lengths_@FIELD_NAME@(const tensor_h t,
 #+begin_src lisp :eval no :tangle templates/tensor_lengths.lisp
 (defcfun ("tensor_lengths_@FIELD_NAME@" %tensor-lengths-@FIELD_NAME@) :void
   (tsr tensor-h)
+  (dimension :size)
   (lengths :pointer))
 #+end_src
 
@@ -298,44 +369,40 @@ void tensor_lengths_@FIELD_NAME@(const tensor_h t,
 :results:
 #+begin_src c++ :tangle teinst.cxx
 void tensor_lengths_s(const tensor_h t,
-                               size_t** lengths) {
+                                 size_t dimension,
+                                 size_t* lengths) {
   using F = float;
   auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
-  size_t * _v = (size_t*)malloc(sizeof(size_t) * _t->order);
-  for (size_t i = 0; i < (size_t)_t->order; i++) {
-    _v[i] = reinterpret_cast<int64_t>(_t->lens[i]);
+  for (size_t i = 0; i < dimension; i++) {
+    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
   }
-  *lengths = _v;
  }
 void tensor_lengths_d(const tensor_h t,
-                               size_t** lengths) {
+                                 size_t dimension,
+                                 size_t* lengths) {
   using F = double;
   auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
-  size_t * _v = (size_t*)malloc(sizeof(size_t) * _t->order);
-  for (size_t i = 0; i < (size_t)_t->order; i++) {
-    _v[i] = reinterpret_cast<int64_t>(_t->lens[i]);
+  for (size_t i = 0; i < dimension; i++) {
+    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
   }
-  *lengths = _v;
  }
 void tensor_lengths_c(const tensor_h t,
-                               size_t** lengths) {
+                                 size_t dimension,
+                                 size_t* lengths) {
   using F = std::complex<float>;
   auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
-  size_t * _v = (size_t*)malloc(sizeof(size_t) * _t->order);
-  for (size_t i = 0; i < (size_t)_t->order; i++) {
-    _v[i] = reinterpret_cast<int64_t>(_t->lens[i]);
+  for (size_t i = 0; i < dimension; i++) {
+    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
   }
-  *lengths = _v;
  }
 void tensor_lengths_z(const tensor_h t,
-                               size_t** lengths) {
+                                 size_t dimension,
+                                 size_t* lengths) {
   using F = std::complex<double>;
   auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
-  size_t * _v = (size_t*)malloc(sizeof(size_t) * _t->order);
-  for (size_t i = 0; i < (size_t)_t->order; i++) {
-    _v[i] = reinterpret_cast<int64_t>(_t->lens[i]);
+  for (size_t i = 0; i < dimension; i++) {
+    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
   }
-  *lengths = _v;
  }
 #+end_src
 :end:
@@ -347,13 +414,17 @@ void tensor_lengths_z(const tensor_h t,
 :results:
 #+begin_src c++ :tangle teinst.h
 void tensor_lengths_s(const tensor_h t,
-                               size_t** lengths);
+                                 size_t dimension,
+                                 size_t* lengths);
 void tensor_lengths_d(const tensor_h t,
-                               size_t** lengths);
+                                 size_t dimension,
+                                 size_t* lengths);
 void tensor_lengths_c(const tensor_h t,
-                               size_t** lengths);
+                                 size_t dimension,
+                                 size_t* lengths);
 void tensor_lengths_z(const tensor_h t,
-                               size_t** lengths);
+                                 size_t dimension,
+                                 size_t* lengths);
 #+end_src
 :end:
 
@@ -366,15 +437,19 @@ void tensor_lengths_z(const tensor_h t,
 #+begin_src lisp :tangle cffi.lisp
 (defcfun ("tensor_lengths_s" %tensor-lengths-s) :void
   (tsr tensor-h)
+  (dimension :size)
   (lengths :pointer))
 (defcfun ("tensor_lengths_d" %tensor-lengths-d) :void
   (tsr tensor-h)
+  (dimension :size)
   (lengths :pointer))
 (defcfun ("tensor_lengths_c" %tensor-lengths-c) :void
   (tsr tensor-h)
+  (dimension :size)
   (lengths :pointer))
 (defcfun ("tensor_lengths_z" %tensor-lengths-z) :void
   (tsr tensor-h)
+  (dimension :size)
   (lengths :pointer))
 #+end_src
 :end:
@@ -478,6 +553,13 @@ void tensor_name(tensor_h t, char** nameptr)
 }
 #+end_src
 
+#+begin_src lisp :tangle cffi.lisp
+(defcfun ("tensor_name" %tensor-name) :void
+  (tsr tensor-h)
+  (name :pointer))
+#+end_src
+
+
 ** Test
 :PROPERTIES:
 :header-args:c+: :tangle test.c
@@ -491,9 +573,14 @@ void tensor_name(tensor_h t, char** nameptr)
 #include <stdio.h>
 #include <teinst.h>
 
+#define LOG(...) if (!rank) printf(__VA_ARGS__);
+
 int main(int argc, char **argv) {
-  printf("TEINST TEST\n\n");
   MPI_Init(&argc, &argv);
+  int rank, np;
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  MPI_Comm_size(MPI_COMM_WORLD, &np);
+  LOG("[31mTEINST TEST[0m (:np %d :rank %d)\n\n", np, rank);
   global_world_init();
 
   size_t TEST_NUMBER = 0;
@@ -504,25 +591,26 @@ int main(int argc, char **argv) {
 
 #+begin_src c :tangle templates/simple-init.c 
 {
-  printf("%ld) Running 'Simple Test' for *_@FIELD_NAME@ functions\n",
-         ++TEST_NUMBER);
+  LOG("%ld) Running [36m'Simple Test'[0m for [33m*_@FIELD_NAME@[0m functions\n",
+      ++TEST_NUMBER);
 
   size_t n = 4;
+  size_t _lenghts[4];
   size_t lens[] = {1UL + TEST_NUMBER,
                    2UL + TEST_NUMBER,
                    3UL + TEST_NUMBER,
                    4UL + TEST_NUMBER};
-  size_t *_lenghts;
   char *name;
   tensor_h tsr;
 
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
   tensor_init_@FIELD_NAME@(&tsr, n, lens);
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
 
-  tensor_lengths_@FIELD_NAME@(tsr, &_lenghts);
-  printf("got lengths = {%ld %ld %ld %ld}\n", _lenghts[0], _lenghts[1],
-         _lenghts[2], _lenghts[3]);
+  tensor_lengths_@FIELD_NAME@(tsr, n, _lenghts);
+  LOG("got lengths = {%ld %ld %ld %ld}\n", /**/
+      _lenghts[0], _lenghts[1],
+      _lenghts[2], _lenghts[3]);
   size_t i = 0;
   assert(lens[i] == _lenghts[i]); i++;
   assert(lens[i] == _lenghts[i]); i++;
@@ -530,12 +618,12 @@ int main(int argc, char **argv) {
   assert(lens[i] == _lenghts[i]);
 
   tensor_name(tsr, &name);
-  printf("got name %s for <%p>\n", name, (void *)tsr);
+  LOG("got name %s for <%p>\n", name, (void *)tsr);
 
-  printf("Freeing <%p>\n", (void *)tsr);
+  LOG("Freeing <%p>\n", (void *)tsr);
   tensor_free_@FIELD_NAME@(tsr);
 
-  printf("\n\n");
+  LOG("\n\n");
 }
 #+end_src
 
@@ -545,25 +633,26 @@ int main(int argc, char **argv) {
 :results:
 #+begin_src c :tangle test.c
 {
-  printf("%ld) Running 'Simple Test' for *_s functions\n",
-         ++TEST_NUMBER);
+  LOG("%ld) Running [36m'Simple Test'[0m for [33m*_s[0m functions\n",
+      ++TEST_NUMBER);
 
   size_t n = 4;
+  size_t _lenghts[4];
   size_t lens[] = {1UL + TEST_NUMBER,
                    2UL + TEST_NUMBER,
                    3UL + TEST_NUMBER,
                    4UL + TEST_NUMBER};
-  size_t *_lenghts;
   char *name;
   tensor_h tsr;
 
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
   tensor_init_s(&tsr, n, lens);
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
 
-  tensor_lengths_s(tsr, &_lenghts);
-  printf("got lengths = {%ld %ld %ld %ld}\n", _lenghts[0], _lenghts[1],
-         _lenghts[2], _lenghts[3]);
+  tensor_lengths_s(tsr, n, _lenghts);
+  LOG("got lengths = {%ld %ld %ld %ld}\n", /**/
+      _lenghts[0], _lenghts[1],
+      _lenghts[2], _lenghts[3]);
   size_t i = 0;
   assert(lens[i] == _lenghts[i]); i++;
   assert(lens[i] == _lenghts[i]); i++;
@@ -571,33 +660,34 @@ int main(int argc, char **argv) {
   assert(lens[i] == _lenghts[i]);
 
   tensor_name(tsr, &name);
-  printf("got name %s for <%p>\n", name, (void *)tsr);
+  LOG("got name %s for <%p>\n", name, (void *)tsr);
 
-  printf("Freeing <%p>\n", (void *)tsr);
+  LOG("Freeing <%p>\n", (void *)tsr);
   tensor_free_s(tsr);
 
-  printf("\n\n");
+  LOG("\n\n");
 }
 {
-  printf("%ld) Running 'Simple Test' for *_d functions\n",
-         ++TEST_NUMBER);
+  LOG("%ld) Running [36m'Simple Test'[0m for [33m*_d[0m functions\n",
+      ++TEST_NUMBER);
 
   size_t n = 4;
+  size_t _lenghts[4];
   size_t lens[] = {1UL + TEST_NUMBER,
                    2UL + TEST_NUMBER,
                    3UL + TEST_NUMBER,
                    4UL + TEST_NUMBER};
-  size_t *_lenghts;
   char *name;
   tensor_h tsr;
 
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
   tensor_init_d(&tsr, n, lens);
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
 
-  tensor_lengths_d(tsr, &_lenghts);
-  printf("got lengths = {%ld %ld %ld %ld}\n", _lenghts[0], _lenghts[1],
-         _lenghts[2], _lenghts[3]);
+  tensor_lengths_d(tsr, n, _lenghts);
+  LOG("got lengths = {%ld %ld %ld %ld}\n", /**/
+      _lenghts[0], _lenghts[1],
+      _lenghts[2], _lenghts[3]);
   size_t i = 0;
   assert(lens[i] == _lenghts[i]); i++;
   assert(lens[i] == _lenghts[i]); i++;
@@ -605,33 +695,34 @@ int main(int argc, char **argv) {
   assert(lens[i] == _lenghts[i]);
 
   tensor_name(tsr, &name);
-  printf("got name %s for <%p>\n", name, (void *)tsr);
+  LOG("got name %s for <%p>\n", name, (void *)tsr);
 
-  printf("Freeing <%p>\n", (void *)tsr);
+  LOG("Freeing <%p>\n", (void *)tsr);
   tensor_free_d(tsr);
 
-  printf("\n\n");
+  LOG("\n\n");
 }
 {
-  printf("%ld) Running 'Simple Test' for *_c functions\n",
-         ++TEST_NUMBER);
+  LOG("%ld) Running [36m'Simple Test'[0m for [33m*_c[0m functions\n",
+      ++TEST_NUMBER);
 
   size_t n = 4;
+  size_t _lenghts[4];
   size_t lens[] = {1UL + TEST_NUMBER,
                    2UL + TEST_NUMBER,
                    3UL + TEST_NUMBER,
                    4UL + TEST_NUMBER};
-  size_t *_lenghts;
   char *name;
   tensor_h tsr;
 
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
   tensor_init_c(&tsr, n, lens);
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
 
-  tensor_lengths_c(tsr, &_lenghts);
-  printf("got lengths = {%ld %ld %ld %ld}\n", _lenghts[0], _lenghts[1],
-         _lenghts[2], _lenghts[3]);
+  tensor_lengths_c(tsr, n, _lenghts);
+  LOG("got lengths = {%ld %ld %ld %ld}\n", /**/
+      _lenghts[0], _lenghts[1],
+      _lenghts[2], _lenghts[3]);
   size_t i = 0;
   assert(lens[i] == _lenghts[i]); i++;
   assert(lens[i] == _lenghts[i]); i++;
@@ -639,33 +730,34 @@ int main(int argc, char **argv) {
   assert(lens[i] == _lenghts[i]);
 
   tensor_name(tsr, &name);
-  printf("got name %s for <%p>\n", name, (void *)tsr);
+  LOG("got name %s for <%p>\n", name, (void *)tsr);
 
-  printf("Freeing <%p>\n", (void *)tsr);
+  LOG("Freeing <%p>\n", (void *)tsr);
   tensor_free_c(tsr);
 
-  printf("\n\n");
+  LOG("\n\n");
 }
 {
-  printf("%ld) Running 'Simple Test' for *_z functions\n",
-         ++TEST_NUMBER);
+  LOG("%ld) Running [36m'Simple Test'[0m for [33m*_z[0m functions\n",
+      ++TEST_NUMBER);
 
   size_t n = 4;
+  size_t _lenghts[4];
   size_t lens[] = {1UL + TEST_NUMBER,
                    2UL + TEST_NUMBER,
                    3UL + TEST_NUMBER,
                    4UL + TEST_NUMBER};
-  size_t *_lenghts;
   char *name;
   tensor_h tsr;
 
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
   tensor_init_z(&tsr, n, lens);
-  printf("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\ttsr = <%p>\n", (void *)tsr);
 
-  tensor_lengths_z(tsr, &_lenghts);
-  printf("got lengths = {%ld %ld %ld %ld}\n", _lenghts[0], _lenghts[1],
-         _lenghts[2], _lenghts[3]);
+  tensor_lengths_z(tsr, n, _lenghts);
+  LOG("got lengths = {%ld %ld %ld %ld}\n", /**/
+      _lenghts[0], _lenghts[1],
+      _lenghts[2], _lenghts[3]);
   size_t i = 0;
   assert(lens[i] == _lenghts[i]); i++;
   assert(lens[i] == _lenghts[i]); i++;
@@ -673,12 +765,12 @@ int main(int argc, char **argv) {
   assert(lens[i] == _lenghts[i]);
 
   tensor_name(tsr, &name);
-  printf("got name %s for <%p>\n", name, (void *)tsr);
+  LOG("got name %s for <%p>\n", name, (void *)tsr);
 
-  printf("Freeing <%p>\n", (void *)tsr);
+  LOG("Freeing <%p>\n", (void *)tsr);
   tensor_free_z(tsr);
 
-  printf("\n\n");
+  LOG("\n\n");
 }
 #+end_src
 :end:

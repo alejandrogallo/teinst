@@ -1,13 +1,9 @@
-{ pkgs ? import <nixpkgs> {} }:
+{ pkgs ? import <nixpkgs> { } }:
 
 pkgs.mkShell rec {
 
-  buildInputs = with pkgs; [
-    openblas scalapack clang-tools
-    c2ffi
-  ];
+  buildInputs = with pkgs; [ openblas scalapack clang-tools c2ffi ecl ccl ];
 
-  shellHook = ''
-  '';
+  shellHook = "";
 
 }

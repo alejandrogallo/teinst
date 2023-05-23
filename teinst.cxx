@@ -15,13 +15,17 @@ void global_world_init() {
 }
 
 void global_world_free() {
-  std::cout << "freeing world\n";
   if (TEINST_GLOBAL_WORLD != nullptr) {
     delete TEINST_GLOBAL_WORLD;
     TEINST_GLOBAL_WORLD = nullptr;
   }
 }
 
+// It will initialize the tensor handle =t= with the address of
+// a valid backend tensor of kind s.
+// =ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+// has 3 dimensions.
+// =lengths= is an array with the size of every dimension.
 void tensor_init_s(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths) {
@@ -35,6 +39,11 @@ void tensor_init_s(tensor_h* t,
                                *TEINST_GLOBAL_WORLD);
   *t = reinterpret_cast<tensor_h>(_t);
 }
+// It will initialize the tensor handle =t= with the address of
+// a valid backend tensor of kind d.
+// =ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+// has 3 dimensions.
+// =lengths= is an array with the size of every dimension.
 void tensor_init_d(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths) {
@@ -48,6 +57,11 @@ void tensor_init_d(tensor_h* t,
                                *TEINST_GLOBAL_WORLD);
   *t = reinterpret_cast<tensor_h>(_t);
 }
+// It will initialize the tensor handle =t= with the address of
+// a valid backend tensor of kind c.
+// =ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+// has 3 dimensions.
+// =lengths= is an array with the size of every dimension.
 void tensor_init_c(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths) {
@@ -61,6 +75,11 @@ void tensor_init_c(tensor_h* t,
                                *TEINST_GLOBAL_WORLD);
   *t = reinterpret_cast<tensor_h>(_t);
 }
+// It will initialize the tensor handle =t= with the address of
+// a valid backend tensor of kind z.
+// =ndim= is the number of dimensions of the tensor, e.g. =t(a,b,c)=
+// has 3 dimensions.
+// =lengths= is an array with the size of every dimension.
 void tensor_init_z(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths) {
@@ -75,45 +94,82 @@ void tensor_init_z(tensor_h* t,
   *t = reinterpret_cast<tensor_h>(_t);
 }
 
-void tensor_lengths_s(const tensor_h t,
-                               size_t** lengths) {
+size_t* tensor_lengths_r_s(const tensor_h t,
+                                 size_t dimension) {
   using F = float;
   auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
-  size_t * _v = (size_t*)malloc(sizeof(size_t) * _t->order);
-  for (size_t i = 0; i < (size_t)_t->order; i++) {
-    _v[i] = reinterpret_cast<int64_t>(_t->lens[i]);
+  auto lengths = (size_t*)malloc(sizeof(size_t) * dimension);
+  for (size_t i = 0; i < dimension; i++) {
+    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
   }
-  *lengths = _v;
+  return lengths;
  }
-void tensor_lengths_d(const tensor_h t,
-                               size_t** lengths) {
+size_t* tensor_lengths_r_d(const tensor_h t,
+                                 size_t dimension) {
   using F = double;
   auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
-  size_t * _v = (size_t*)malloc(sizeof(size_t) * _t->order);
-  for (size_t i = 0; i < (size_t)_t->order; i++) {
-    _v[i] = reinterpret_cast<int64_t>(_t->lens[i]);
+  auto lengths = (size_t*)malloc(sizeof(size_t) * dimension);
+  for (size_t i = 0; i < dimension; i++) {
+    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
   }
-  *lengths = _v;
+  return lengths;
  }
-void tensor_lengths_c(const tensor_h t,
-                               size_t** lengths) {
+size_t* tensor_lengths_r_c(const tensor_h t,
+                                 size_t dimension) {
   using F = std::complex<float>;
   auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
-  size_t * _v = (size_t*)malloc(sizeof(size_t) * _t->order);
-  for (size_t i = 0; i < (size_t)_t->order; i++) {
-    _v[i] = reinterpret_cast<int64_t>(_t->lens[i]);
+  auto lengths = (size_t*)malloc(sizeof(size_t) * dimension);
+  for (size_t i = 0; i < dimension; i++) {
+    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
   }
-  *lengths = _v;
+  return lengths;
  }
-void tensor_lengths_z(const tensor_h t,
-                               size_t** lengths) {
+size_t* tensor_lengths_r_z(const tensor_h t,
+                                 size_t dimension) {
   using F = std::complex<double>;
   auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
-  size_t * _v = (size_t*)malloc(sizeof(size_t) * _t->order);
-  for (size_t i = 0; i < (size_t)_t->order; i++) {
-    _v[i] = reinterpret_cast<int64_t>(_t->lens[i]);
+  auto lengths = (size_t*)malloc(sizeof(size_t) * dimension);
+  for (size_t i = 0; i < dimension; i++) {
+    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
   }
-  *lengths = _v;
+  return lengths;
+ }
+
+void tensor_lengths_s(const tensor_h t,
+                                 size_t dimension,
+                                 size_t* lengths) {
+  using F = float;
+  auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
+  for (size_t i = 0; i < dimension; i++) {
+    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
+  }
+ }
+void tensor_lengths_d(const tensor_h t,
+                                 size_t dimension,
+                                 size_t* lengths) {
+  using F = double;
+  auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
+  for (size_t i = 0; i < dimension; i++) {
+    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
+  }
+ }
+void tensor_lengths_c(const tensor_h t,
+                                 size_t dimension,
+                                 size_t* lengths) {
+  using F = std::complex<float>;
+  auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
+  for (size_t i = 0; i < dimension; i++) {
+    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
+  }
+ }
+void tensor_lengths_z(const tensor_h t,
+                                 size_t dimension,
+                                 size_t* lengths) {
+  using F = std::complex<double>;
+  auto const _t = reinterpret_cast<CTF::Tensor<F>*>(t);
+  for (size_t i = 0; i < dimension; i++) {
+    lengths[i] = reinterpret_cast<int64_t>(_t->lens[i]);
+  }
  }
 
 void tensor_free_s(tensor_h t) {
