@@ -6,7 +6,7 @@ CXX = mpic++ $(CXXFLAGS)
 CTF_CPATH = -I$(CTF_PATH)/include
 CTF_LIBS = $(CTF_PATH)/lib/libctf.a -lopenblas -lscalapack
 
-.PHONY: all m4
+.PHONY: all
 all: libteinst.so test
 
 m4: teinst.cxx teinst.h
@@ -14,20 +14,34 @@ m4: teinst.cxx teinst.h
 test: test.c libteinst.so
 	mpicc -I. $(CXXFLAGS) test.c -o test -L. -lteinst
 
-teinst.cxx: $(M4_SOURCES)
-teinst.h: $(M4_SOURCES)
-	m4 $@.m4 > $@
-	clang-format -i $@
+# teinst.cxx: $(M4_SOURCES)
+# teinst.h: $(M4_SOURCES)
+# 	m4 $@.m4 > $@
+# 	clang-format -i $@
 
-%: %.m4
-	m4 $< > $@
-	clang-format -i $@
+teinst.cxx teinst.h: readme.org
+	emacs --batch -Q \
+		readme.org \
+		-f org-babel-tangle \
+		--eval "(require 'ob-shell)" \
+		--eval '(setq org-confirm-babel-evaluate nil)' \
+		-f org-babel-execute-buffer \
+		-f org-babel-tangle \
+		-f save-buffer
+
+# %: %.m4
+# 	m4 $< > $@
+# 	clang-format -i $@
 
 teinst.o: teinst.cxx teinst.h
 	$(CXX) -fPIC -c -I. $(CTF_CPATH) teinst.cxx
 
 libteinst.so: teinst.o
 	$(CXX) -fPIC -shared -fopenmp -o $@ $< $(CTF_LIBS)
+
+instantiate:
+	./tools/field-instantiate.sh templates/$(TEMPLATE)
+
 
 clean:
 	-rm *o
