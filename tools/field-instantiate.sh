@@ -4,10 +4,10 @@
 in=${1}
 
 SED_EXPRESSIONS=(
-  "s/@FIELD_NAME@/s/g; s/@FIELD_TYPE@/float/g"
-  "s/@FIELD_NAME@/d/g; s/@FIELD_TYPE@/double/g"
-  "s/@FIELD_NAME@/c/g; s/@FIELD_TYPE@/std::complex<float>/g"
-  "s/@FIELD_NAME@/z/g; s/@FIELD_TYPE@/std::complex<double>/g"
+  "s/@FIELD_NAME@/s/g; s/@FIELD_TYPE@/float/g; s/@FIELD_CTYPE@/float/g"
+  "s/@FIELD_NAME@/d/g; s/@FIELD_TYPE@/double/g; s/@FIELD_CTYPE@/double/g"
+  "s/@FIELD_NAME@/c/g; s/@FIELD_TYPE@/std::complex<float>/g; s/@FIELD_CTYPE@/_Complex float/g"
+  "s/@FIELD_NAME@/z/g; s/@FIELD_TYPE@/std::complex<double>/g; s/@FIELD_CTYPE@/_Complex double/g"
 )
 
 for _sedexpr in "${SED_EXPRESSIONS[@]}"; do

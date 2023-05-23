@@ -65,6 +65,39 @@ void tensor_free_z(tensor_h t);
 
 void tensor_name(tensor_h t, char** nameptr);
 
+void tensor_contract_s(float const * alpha,
+                                  tensor_h const A,
+                                  char const * idx_A,
+                                  tensor_h const B,
+                                  char const * idx_B,
+                                  float const * beta,
+                                  char const * idx_C,
+                                  tensor_h C);
+void tensor_contract_d(double const * alpha,
+                                  tensor_h const A,
+                                  char const * idx_A,
+                                  tensor_h const B,
+                                  char const * idx_B,
+                                  double const * beta,
+                                  char const * idx_C,
+                                  tensor_h C);
+void tensor_contract_c(_Complex float const * alpha,
+                                  tensor_h const A,
+                                  char const * idx_A,
+                                  tensor_h const B,
+                                  char const * idx_B,
+                                  _Complex float const * beta,
+                                  char const * idx_C,
+                                  tensor_h C);
+void tensor_contract_z(_Complex double const * alpha,
+                                  tensor_h const A,
+                                  char const * idx_A,
+                                  tensor_h const B,
+                                  char const * idx_B,
+                                  _Complex double const * beta,
+                                  char const * idx_C,
+                                  tensor_h C);
+
 #ifdef __cplusplus
 } // extern "C"
 #endif

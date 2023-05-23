@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <teinst.h>
+#include <complex.h>
 
     extern "C" {
 
@@ -154,5 +155,86 @@ void tensor_name(tensor_h t, char** nameptr) {
     *nameptr = (char *)malloc(name.size());
     memcpy(*nameptr, name.c_str(), name.size());
 }
+
+void tensor_contract_s(float const * alpha,
+                                  tensor_h const A,
+                                  char const * idx_A,
+                                  tensor_h const B,
+                                  char const * idx_B,
+                                  float const * beta,
+                                  char const * idx_C,
+                                  tensor_h C) {
+  using F = float;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
+  auto _C = reinterpret_cast<CTF::Tensor<F>*>(C);
+  _C->contract(*alpha,
+               *_A,
+               idx_A,
+               *_B,
+               idx_B,
+               *beta,
+               idx_C);
+ }
+void tensor_contract_d(double const * alpha,
+                                  tensor_h const A,
+                                  char const * idx_A,
+                                  tensor_h const B,
+                                  char const * idx_B,
+                                  double const * beta,
+                                  char const * idx_C,
+                                  tensor_h C) {
+  using F = double;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
+  auto _C = reinterpret_cast<CTF::Tensor<F>*>(C);
+  _C->contract(*alpha,
+               *_A,
+               idx_A,
+               *_B,
+               idx_B,
+               *beta,
+               idx_C);
+ }
+void tensor_contract_c(_Complex float const * alpha,
+                                  tensor_h const A,
+                                  char const * idx_A,
+                                  tensor_h const B,
+                                  char const * idx_B,
+                                  _Complex float const * beta,
+                                  char const * idx_C,
+                                  tensor_h C) {
+  using F = std::complex<float>;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
+  auto _C = reinterpret_cast<CTF::Tensor<F>*>(C);
+  _C->contract(*alpha,
+               *_A,
+               idx_A,
+               *_B,
+               idx_B,
+               *beta,
+               idx_C);
+ }
+void tensor_contract_z(_Complex double const * alpha,
+                                  tensor_h const A,
+                                  char const * idx_A,
+                                  tensor_h const B,
+                                  char const * idx_B,
+                                  _Complex double const * beta,
+                                  char const * idx_C,
+                                  tensor_h C) {
+  using F = std::complex<double>;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
+  auto _C = reinterpret_cast<CTF::Tensor<F>*>(C);
+  _C->contract(*alpha,
+               *_A,
+               idx_A,
+               *_B,
+               idx_B,
+               *beta,
+               idx_C);
+ }
 
 } // extern "C"
