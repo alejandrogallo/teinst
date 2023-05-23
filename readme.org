@@ -1,13 +1,14 @@
 * API
 :PROPERTIES:
 :header-args:c++: :noweb yes :eval no
+:header-args:lisp: :eval no
 :END:
 
 ** Scripts                                                         :noexport:
 
 #+name: instantiate-template
-#+begin_src shell :var in="" tangle="/tmp/test" :results verbatim drawer
-echo "#+begin_src c++ :tangle $tangle"
+#+begin_src shell :var in="" tangle="/tmp/test" lang="c++" :results verbatim drawer
+echo "#+begin_src $lang :tangle $tangle"
 ./tools/field-instantiate.sh templates/$in
 echo "#+end_src"
 #+end_src
@@ -20,8 +21,8 @@ echo "#+end_src"
 
 
 #+name: instantiate-header
-#+begin_src shell :var in="" tangle="/tmp/test" :results verbatim drawer
-echo "#+begin_src c++ :tangle $tangle"
+#+begin_src shell :var in="" tangle="/tmp/test" lang="c++" :results verbatim drawer
+echo "#+begin_src $lang :tangle $tangle"
 tmp=$(mktemp)
 cp templates/${in} "${tmp}"
 sed -i "s/)[ ]*$/);/g" ${tmp}
@@ -64,9 +65,14 @@ extern "C" {
 ** The tensor handle =tensor_h= type
 
 #+begin_src c++ :tangle teinst.h
-  typedef size_t tensor_h;
+typedef size_t tensor_h;
 #+end_src
 
+** Lisp
+
+#+begin_src lisp :eval no :tangle cffi.lisp
+(defctype tensor-h (:pointer :size))
+#+end_src
 
 ** World functions
 
@@ -116,8 +122,17 @@ void tensor_init_@FIELD_NAME@(tensor_h* t,
 }
 #+end_src
 
+#+begin_src lisp :eval no :tangle templates/tensor_init.lisp 
+(defcfun ("tensor_init_@FIELD_NAME@" %tensor-init-@FIELD_NAME@)
+    :void
+  (tsr (:pointer tensor-h))
+  (ndim :size)
+  (lengths (:pointer :size)))
+#+end_src
+
 
 *** Instantiation
+**** Implementation
 
 #+call: instantiate-template(in="tensor_init.cxx", tangle="teinst.cxx")
 
@@ -179,6 +194,8 @@ void tensor_init_z(tensor_h* t,
 #+end_src
 :end:
 
+**** Header
+
 #+call: instantiate-header(in="tensor_init.h", tangle="teinst.h")
 
 #+RESULTS:
@@ -196,6 +213,36 @@ void tensor_init_c(tensor_h* t,
 void tensor_init_z(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths);
+#+end_src
+:end:
+
+**** Lisp
+
+#+call: instantiate-template(in="tensor_init.lisp", tangle="cffi.lisp", lang="lisp")
+
+#+RESULTS:
+:results:
+#+begin_src lisp :tangle cffi.lisp
+(defcfun ("tensor_init_s" %tensor-init-s)
+    :void
+  (tsr (:pointer tensor-h))
+  (ndim :size)
+  (lengths (:pointer :size)))
+(defcfun ("tensor_init_d" %tensor-init-d)
+    :void
+  (tsr (:pointer tensor-h))
+  (ndim :size)
+  (lengths (:pointer :size)))
+(defcfun ("tensor_init_c" %tensor-init-c)
+    :void
+  (tsr (:pointer tensor-h))
+  (ndim :size)
+  (lengths (:pointer :size)))
+(defcfun ("tensor_init_z" %tensor-init-z)
+    :void
+  (tsr (:pointer tensor-h))
+  (ndim :size)
+  (lengths (:pointer :size)))
 #+end_src
 :end:
 
@@ -218,6 +265,13 @@ void tensor_lengths_@FIELD_NAME@(const tensor_h t,
  }
 
 #+end_src
+
+#+begin_src lisp :eval no :tangle templates/tensor_lengths.lisp
+(defcfun ("tensor_lengths_@FIELD_NAME@" %tensor-lengths-@FIELD_NAME@) :void
+  (tsr tensor-h)
+  (lengths :pointer))
+#+end_src
+
 
 *** Instantiation
 **** Implementation
@@ -286,6 +340,28 @@ void tensor_lengths_z(const tensor_h t,
 #+end_src
 :end:
 
+**** Lisp
+
+#+call: instantiate-template(in="tensor_lengths.lisp", tangle="cffi.lisp", lang="lisp")
+
+#+RESULTS:
+:results:
+#+begin_src lisp :tangle cffi.lisp
+(defcfun ("tensor_lengths_s" %tensor-lengths-s) :void
+  (tsr tensor-h)
+  (lengths :pointer))
+(defcfun ("tensor_lengths_d" %tensor-lengths-d) :void
+  (tsr tensor-h)
+  (lengths :pointer))
+(defcfun ("tensor_lengths_c" %tensor-lengths-c) :void
+  (tsr tensor-h)
+  (lengths :pointer))
+(defcfun ("tensor_lengths_z" %tensor-lengths-z) :void
+  (tsr tensor-h)
+  (lengths :pointer))
+#+end_src
+:end:
+
 ** =tensor_free=
 
 #+begin_src c++ :noweb-ref tensor-free-header :tangle templates/tensor_free.h
@@ -300,8 +376,13 @@ void tensor_free_@FIELD_NAME@(tensor_h t)
  }
 #+end_src
 
-*** Instantiation
+#+begin_src lisp :tangle templates/tensor_free.lisp
+(defcfun ("tensor_free_@FIELD_NAME@" %tensor-free-@FIELD_NAME@) :void
+  (tsr tensor-h))
+#+end_src
 
+
+*** Instantiation
 **** Implementation
 
 #+call: instantiate-template(in="tensor_free.cxx", tangle="teinst.cxx")
@@ -339,6 +420,24 @@ void tensor_free_s(tensor_h t);
 void tensor_free_d(tensor_h t);
 void tensor_free_c(tensor_h t);
 void tensor_free_z(tensor_h t);
+#+end_src
+:end:
+
+**** Lisp
+
+#+call: instantiate-template(in="tensor_free.lisp", tangle="cffi.lisp", lang="lisp")
+
+#+RESULTS:
+:results:
+#+begin_src lisp :tangle cffi.lisp
+(defcfun ("tensor_free_s" %tensor-free-s) :void
+  (tsr tensor-h))
+(defcfun ("tensor_free_d" %tensor-free-d) :void
+  (tsr tensor-h))
+(defcfun ("tensor_free_c" %tensor-free-c) :void
+  (tsr tensor-h))
+(defcfun ("tensor_free_z" %tensor-free-z) :void
+  (tsr tensor-h))
 #+end_src
 :end:
 
