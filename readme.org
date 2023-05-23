@@ -62,6 +62,16 @@ extern "C" {
 
 #+end_src
 
+*** Lisp
+
+#+begin_src lisp :tangle cffi.lisp
+(in-package :teinst)
+
+(define-foreign-library libteinst (t (:default "libteinst")))
+(use-foreign-library libteinst)
+#+end_src
+
+
 
 ** The tensor handle =tensor_h= type
 
@@ -69,7 +79,7 @@ extern "C" {
 typedef size_t tensor_h;
 #+end_src
 
-** Lisp
+*** Lisp
 
 #+begin_src lisp :eval no :tangle cffi.lisp
 (defctype tensor-h (:pointer :size))
@@ -100,6 +110,12 @@ void global_world_free() {
   }
 }
 #+end_src
+
+#+begin_src lisp :tangle cffi.lisp
+(defcfun ("global_world_init" %global-world-init) :void)
+(defcfun ("global_world_free" %global-world-free) :void)
+#+end_src
+
 
 ** =tensor_init=
 
