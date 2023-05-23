@@ -6,7 +6,7 @@
 ** Scripts                                                         :noexport:
 
 #+name: instantiate-template
-#+begin_src shell :var in="" tangle="" :results verbatim drawer
+#+begin_src shell :var in="" tangle="/tmp/test" :results verbatim drawer
 echo "#+begin_src c++ :tangle $tangle"
 ./tools/field-instantiate.sh templates/$in
 echo "#+end_src"
@@ -14,12 +14,13 @@ echo "#+end_src"
 
 #+RESULTS: instantiate-template
 :results:
-#+begin_src c++ :tangle 
+#+begin_src c++ :tangle /tmp/test
 #+end_src
 :end:
 
+
 #+name: instantiate-header
-#+begin_src shell :var in="" tangle="" :results verbatim drawer
+#+begin_src shell :var in="" tangle="/tmp/test" :results verbatim drawer
 echo "#+begin_src c++ :tangle $tangle"
 tmp=$(mktemp)
 cp templates/${in} "${tmp}"
@@ -30,9 +31,10 @@ echo "#+end_src"
 
 #+RESULTS: instantiate-header
 :results:
-#+begin_src c++ :tangle 
+#+begin_src c++ :tangle /tmp/test
 #+end_src
 :end:
+
 
 ** Prolog
 #+begin_src c++ :tangle teinst.h
@@ -95,7 +97,7 @@ void global_world_free() {
 ** =tensor_init=
 
 #+begin_src c++ :noweb-ref tensor-init-header :tangle templates/tensor_init.h
-void penis_tensor_init_@FIELD_NAME@(tensor_h* t,
+void tensor_init_@FIELD_NAME@(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths)
 #+end_src
@@ -122,7 +124,7 @@ void penis_tensor_init_@FIELD_NAME@(tensor_h* t,
 #+RESULTS:
 :results:
 #+begin_src c++ :tangle teinst.cxx
-void penis_tensor_init_s(tensor_h* t,
+void tensor_init_s(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths) {
   using F = float;
@@ -135,7 +137,7 @@ void penis_tensor_init_s(tensor_h* t,
                                *TEINST_GLOBAL_WORLD);
   *t = reinterpret_cast<tensor_h>(_t);
 }
-void penis_tensor_init_d(tensor_h* t,
+void tensor_init_d(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths) {
   using F = double;
@@ -148,7 +150,7 @@ void penis_tensor_init_d(tensor_h* t,
                                *TEINST_GLOBAL_WORLD);
   *t = reinterpret_cast<tensor_h>(_t);
 }
-void penis_tensor_init_c(tensor_h* t,
+void tensor_init_c(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths) {
   using F = std::complex<float>;
@@ -161,7 +163,7 @@ void penis_tensor_init_c(tensor_h* t,
                                *TEINST_GLOBAL_WORLD);
   *t = reinterpret_cast<tensor_h>(_t);
 }
-void penis_tensor_init_z(tensor_h* t,
+void tensor_init_z(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths) {
   using F = std::complex<double>;
@@ -182,16 +184,16 @@ void penis_tensor_init_z(tensor_h* t,
 #+RESULTS:
 :results:
 #+begin_src c++ :tangle teinst.h
-void penis_tensor_init_s(tensor_h* t,
+void tensor_init_s(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths);
-void penis_tensor_init_d(tensor_h* t,
+void tensor_init_d(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths);
-void penis_tensor_init_c(tensor_h* t,
+void tensor_init_c(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths);
-void penis_tensor_init_z(tensor_h* t,
+void tensor_init_z(tensor_h* t,
                     const size_t ndim,
                     const size_t* lengths);
 #+end_src

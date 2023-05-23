@@ -20,14 +20,7 @@ test: test.c libteinst.so
 # 	clang-format -i $@
 
 teinst.cxx teinst.h: readme.org
-	emacs --batch -Q \
-		readme.org \
-		-f org-babel-tangle \
-		--eval "(require 'ob-shell)" \
-		--eval '(setq org-confirm-babel-evaluate nil)' \
-		-f org-babel-execute-buffer \
-		-f org-babel-tangle \
-		-f save-buffer
+	emacs --batch -Q readme.org --load build.el
 
 # %: %.m4
 # 	m4 $< > $@
