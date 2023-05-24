@@ -158,7 +158,7 @@ int main(int argc, char **argv) {
 
 {
 
-  LOG("%ld) Running [36m'Simple Test'[0m for [33m*_s[0m functions\n",
+  LOG("%ld) Running [36m'Simple Contraction'[0m for [33m*_s[0m functions\n",
       ++TEST_NUMBER);
 
   tensor_h A = 0x0, B = 0x0, C = 0x0;
@@ -220,7 +220,7 @@ int main(int argc, char **argv) {
 }
 {
 
-  LOG("%ld) Running [36m'Simple Test'[0m for [33m*_d[0m functions\n",
+  LOG("%ld) Running [36m'Simple Contraction'[0m for [33m*_d[0m functions\n",
       ++TEST_NUMBER);
 
   tensor_h A = 0x0, B = 0x0, C = 0x0;
@@ -282,7 +282,7 @@ int main(int argc, char **argv) {
 }
 {
 
-  LOG("%ld) Running [36m'Simple Test'[0m for [33m*_c[0m functions\n",
+  LOG("%ld) Running [36m'Simple Contraction'[0m for [33m*_c[0m functions\n",
       ++TEST_NUMBER);
 
   tensor_h A = 0x0, B = 0x0, C = 0x0;
@@ -344,7 +344,7 @@ int main(int argc, char **argv) {
 }
 {
 
-  LOG("%ld) Running [36m'Simple Test'[0m for [33m*_z[0m functions\n",
+  LOG("%ld) Running [36m'Simple Contraction'[0m for [33m*_z[0m functions\n",
       ++TEST_NUMBER);
 
   tensor_h A = 0x0, B = 0x0, C = 0x0;

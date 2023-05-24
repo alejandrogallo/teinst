@@ -1,6 +1,6 @@
 {
 
-  LOG("%ld) Running [36m'Simple Test'[0m for [33m*_@FIELD_NAME@[0m functions\n",
+  LOG("%ld) Running [36m'Simple Contraction'[0m for [33m*_@FIELD_NAME@[0m functions\n",
       ++TEST_NUMBER);
 
   tensor_h A = 0x0, B = 0x0, C = 0x0;
