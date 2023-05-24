@@ -11,12 +11,12 @@
   char *name;
   tensor_h tsr;
 
-  LOG("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\t- tsr = <%p>\n", (void *)tsr);
   tensor_init_@FIELD_NAME@(&tsr, n, lens);
-  LOG("\ttsr = <%p>\n", (void *)tsr);
+  LOG("\t- tsr = <%p>\n", (void *)tsr);
 
   tensor_lengths_@FIELD_NAME@(tsr, n, _lenghts);
-  LOG("got lengths = {%ld %ld %ld %ld}\n", /**/
+  LOG("\t- got lengths = {%ld %ld %ld %ld}\n", /**/
       _lenghts[0], _lenghts[1],
       _lenghts[2], _lenghts[3]);
   size_t i = 0;
@@ -26,9 +26,9 @@
   assert(lens[i] == _lenghts[i]);
 
   tensor_name(tsr, &name);
-  LOG("got name %s for <%p>\n", name, (void *)tsr);
+  LOG("\t- got name %s for <%p>\n", name, (void *)tsr);
 
-  LOG("Freeing <%p>\n", (void *)tsr);
+  LOG("\t- Freeing <%p>\n", (void *)tsr);
   tensor_free_@FIELD_NAME@(tsr);
 
   LOG("\n\n");
