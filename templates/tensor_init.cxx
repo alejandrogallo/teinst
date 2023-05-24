@@ -10,9 +10,14 @@ void tensor_init_@FIELD_NAME@(tensor_h* t,
   global_world_init();
   std::vector<int> syms(ndim, NS), lens(ndim);
   for (size_t i = 0; i < ndim; i++) {
-    lens[i] = lengths[i];
+    lens[i] = (int)lengths[i];
   }
   auto _t = new CTF::Tensor<F>((int)ndim, lens.data(), syms.data(),
                                *TEINST_GLOBAL_WORLD);
+  if (ndim == 4) {
+    std::cout << "Doing sum"  << _t << std::endl;
+    // (*_t)["abcd"] += (*_t)["abcd"];
+    //_t->sum();
+  }
   *t = reinterpret_cast<tensor_h>(_t);
 }

@@ -34,10 +34,15 @@ void tensor_init_s(tensor_h* t,
   global_world_init();
   std::vector<int> syms(ndim, NS), lens(ndim);
   for (size_t i = 0; i < ndim; i++) {
-    lens[i] = lengths[i];
+    lens[i] = (int)lengths[i];
   }
   auto _t = new CTF::Tensor<F>((int)ndim, lens.data(), syms.data(),
                                *TEINST_GLOBAL_WORLD);
+  if (ndim == 4) {
+    std::cout << "Doing sum"  << _t << std::endl;
+    // (*_t)["abcd"] += (*_t)["abcd"];
+    //_t->sum();
+  }
   *t = reinterpret_cast<tensor_h>(_t);
 }
 // It will initialize the tensor handle =t= with the address of
@@ -52,10 +57,15 @@ void tensor_init_d(tensor_h* t,
   global_world_init();
   std::vector<int> syms(ndim, NS), lens(ndim);
   for (size_t i = 0; i < ndim; i++) {
-    lens[i] = lengths[i];
+    lens[i] = (int)lengths[i];
   }
   auto _t = new CTF::Tensor<F>((int)ndim, lens.data(), syms.data(),
                                *TEINST_GLOBAL_WORLD);
+  if (ndim == 4) {
+    std::cout << "Doing sum"  << _t << std::endl;
+    // (*_t)["abcd"] += (*_t)["abcd"];
+    //_t->sum();
+  }
   *t = reinterpret_cast<tensor_h>(_t);
 }
 // It will initialize the tensor handle =t= with the address of
@@ -70,10 +80,15 @@ void tensor_init_c(tensor_h* t,
   global_world_init();
   std::vector<int> syms(ndim, NS), lens(ndim);
   for (size_t i = 0; i < ndim; i++) {
-    lens[i] = lengths[i];
+    lens[i] = (int)lengths[i];
   }
   auto _t = new CTF::Tensor<F>((int)ndim, lens.data(), syms.data(),
                                *TEINST_GLOBAL_WORLD);
+  if (ndim == 4) {
+    std::cout << "Doing sum"  << _t << std::endl;
+    // (*_t)["abcd"] += (*_t)["abcd"];
+    //_t->sum();
+  }
   *t = reinterpret_cast<tensor_h>(_t);
 }
 // It will initialize the tensor handle =t= with the address of
@@ -88,10 +103,15 @@ void tensor_init_z(tensor_h* t,
   global_world_init();
   std::vector<int> syms(ndim, NS), lens(ndim);
   for (size_t i = 0; i < ndim; i++) {
-    lens[i] = lengths[i];
+    lens[i] = (int)lengths[i];
   }
   auto _t = new CTF::Tensor<F>((int)ndim, lens.data(), syms.data(),
                                *TEINST_GLOBAL_WORLD);
+  if (ndim == 4) {
+    std::cout << "Doing sum"  << _t << std::endl;
+    // (*_t)["abcd"] += (*_t)["abcd"];
+    //_t->sum();
+  }
   *t = reinterpret_cast<tensor_h>(_t);
 }
 
@@ -300,10 +320,10 @@ void tensor_sum_s(float const * alpha,
   using F = float;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
-  _B->sum(*alpha,
+  _B->sum(static_cast<F>(*alpha),
           *_A,
           idx_A,
-          *beta,
+          static_cast<F>(*beta),
           idx_B);
  }
 void tensor_sum_d(double const * alpha,
@@ -315,10 +335,10 @@ void tensor_sum_d(double const * alpha,
   using F = double;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
-  _B->sum(*alpha,
+  _B->sum(static_cast<F>(*alpha),
           *_A,
           idx_A,
-          *beta,
+          static_cast<F>(*beta),
           idx_B);
  }
 void tensor_sum_c(_Complex float const * alpha,
@@ -330,10 +350,10 @@ void tensor_sum_c(_Complex float const * alpha,
   using F = std::complex<float>;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
-  _B->sum(*alpha,
+  _B->sum(static_cast<F>(*alpha),
           *_A,
           idx_A,
-          *beta,
+          static_cast<F>(*beta),
           idx_B);
  }
 void tensor_sum_z(_Complex double const * alpha,
@@ -345,10 +365,10 @@ void tensor_sum_z(_Complex double const * alpha,
   using F = std::complex<double>;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
-  _B->sum(*alpha,
+  _B->sum(static_cast<F>(*alpha),
           *_A,
           idx_A,
-          *beta,
+          static_cast<F>(*beta),
           idx_B);
  }
 

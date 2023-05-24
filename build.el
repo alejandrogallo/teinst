@@ -10,8 +10,8 @@
 (header "EXECUTE BUFFER TO INSTANTIATE")
 (org-babel-execute-buffer)
 
-(header "LAST TANGLE")
-(org-babel-tangle)
-
 (message "\n\nSAVING BUFFER\n\n")
 (save-buffer)
+
+(header "LAST TANGLE")
+(org-babel-tangle)

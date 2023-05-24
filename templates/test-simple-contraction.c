@@ -1,4 +1,3 @@
-#line 1 "simple-contraction-org-src"
 {
 
   LOG("%ld) Running [36m'Simple Test'[0m for [33m*_@FIELD_NAME@[0m functions\n",
@@ -7,9 +6,9 @@
   tensor_h A = 0x0, B = 0x0, C = 0x0;
 
   size_t
-    lens_A[] = {20, 20, 30}, dim_A = 3,
-    lens_B[] = {30, 20}, dim_B = 2,
-    lens_C[] = {20}, dim_C = 1;
+    lens_A[] = {20UL, 20UL, 30UL}, dim_A = 3,
+    lens_B[] = {30UL, 20UL}, dim_B = 2,
+    lens_C[] = {20UL}, dim_C = 1;
 
   double
     norm_A,

@@ -7,9 +7,9 @@ void tensor_sum_@FIELD_NAME@(@FIELD_CTYPE@ const * alpha,
   using F = @FIELD_TYPE@;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
-  _B->sum(*alpha,
+  _B->sum(static_cast<F>(*alpha),
           *_A,
           idx_A,
-          *beta,
+          static_cast<F>(*beta),
           idx_B);
  }

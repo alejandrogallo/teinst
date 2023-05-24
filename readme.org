@@ -146,10 +146,15 @@ void tensor_init_@FIELD_NAME@(tensor_h* t,
   global_world_init();
   std::vector<int> syms(ndim, NS), lens(ndim);
   for (size_t i = 0; i < ndim; i++) {
-    lens[i] = lengths[i];
+    lens[i] = (int)lengths[i];
   }
   auto _t = new CTF::Tensor<F>((int)ndim, lens.data(), syms.data(),
                                ,*TEINST_GLOBAL_WORLD);
+  if (ndim == 4) {
+    std::cout << "Doing sum"  << _t << std::endl;
+    // (*_t)["abcd"] += (*_t)["abcd"];
+    //_t->sum();
+  }
   ,*t = reinterpret_cast<tensor_h>(_t);
 }
 #+end_src
@@ -184,10 +189,15 @@ void tensor_init_s(tensor_h* t,
   global_world_init();
   std::vector<int> syms(ndim, NS), lens(ndim);
   for (size_t i = 0; i < ndim; i++) {
-    lens[i] = lengths[i];
+    lens[i] = (int)lengths[i];
   }
   auto _t = new CTF::Tensor<F>((int)ndim, lens.data(), syms.data(),
                                *TEINST_GLOBAL_WORLD);
+  if (ndim == 4) {
+    std::cout << "Doing sum"  << _t << std::endl;
+    // (*_t)["abcd"] += (*_t)["abcd"];
+    //_t->sum();
+  }
   *t = reinterpret_cast<tensor_h>(_t);
 }
 // It will initialize the tensor handle =t= with the address of
@@ -202,10 +212,15 @@ void tensor_init_d(tensor_h* t,
   global_world_init();
   std::vector<int> syms(ndim, NS), lens(ndim);
   for (size_t i = 0; i < ndim; i++) {
-    lens[i] = lengths[i];
+    lens[i] = (int)lengths[i];
   }
   auto _t = new CTF::Tensor<F>((int)ndim, lens.data(), syms.data(),
                                *TEINST_GLOBAL_WORLD);
+  if (ndim == 4) {
+    std::cout << "Doing sum"  << _t << std::endl;
+    // (*_t)["abcd"] += (*_t)["abcd"];
+    //_t->sum();
+  }
   *t = reinterpret_cast<tensor_h>(_t);
 }
 // It will initialize the tensor handle =t= with the address of
@@ -220,10 +235,15 @@ void tensor_init_c(tensor_h* t,
   global_world_init();
   std::vector<int> syms(ndim, NS), lens(ndim);
   for (size_t i = 0; i < ndim; i++) {
-    lens[i] = lengths[i];
+    lens[i] = (int)lengths[i];
   }
   auto _t = new CTF::Tensor<F>((int)ndim, lens.data(), syms.data(),
                                *TEINST_GLOBAL_WORLD);
+  if (ndim == 4) {
+    std::cout << "Doing sum"  << _t << std::endl;
+    // (*_t)["abcd"] += (*_t)["abcd"];
+    //_t->sum();
+  }
   *t = reinterpret_cast<tensor_h>(_t);
 }
 // It will initialize the tensor handle =t= with the address of
@@ -238,10 +258,15 @@ void tensor_init_z(tensor_h* t,
   global_world_init();
   std::vector<int> syms(ndim, NS), lens(ndim);
   for (size_t i = 0; i < ndim; i++) {
-    lens[i] = lengths[i];
+    lens[i] = (int)lengths[i];
   }
   auto _t = new CTF::Tensor<F>((int)ndim, lens.data(), syms.data(),
                                *TEINST_GLOBAL_WORLD);
+  if (ndim == 4) {
+    std::cout << "Doing sum"  << _t << std::endl;
+    // (*_t)["abcd"] += (*_t)["abcd"];
+    //_t->sum();
+  }
   *t = reinterpret_cast<tensor_h>(_t);
 }
 #+end_src
@@ -1037,10 +1062,10 @@ void tensor_sum_@FIELD_NAME@(@FIELD_CTYPE@ const * alpha,
   using F = @FIELD_TYPE@;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
-  _B->sum(*alpha,
+  _B->sum(static_cast<F>(*alpha),
           ,*_A,
           idx_A,
-          ,*beta,
+          static_cast<F>(*beta),
           idx_B);
  }
 #+end_src
@@ -1108,10 +1133,10 @@ void tensor_sum_s(float const * alpha,
   using F = float;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
-  _B->sum(*alpha,
+  _B->sum(static_cast<F>(*alpha),
           *_A,
           idx_A,
-          *beta,
+          static_cast<F>(*beta),
           idx_B);
  }
 void tensor_sum_d(double const * alpha,
@@ -1123,10 +1148,10 @@ void tensor_sum_d(double const * alpha,
   using F = double;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
-  _B->sum(*alpha,
+  _B->sum(static_cast<F>(*alpha),
           *_A,
           idx_A,
-          *beta,
+          static_cast<F>(*beta),
           idx_B);
  }
 void tensor_sum_c(_Complex float const * alpha,
@@ -1138,10 +1163,10 @@ void tensor_sum_c(_Complex float const * alpha,
   using F = std::complex<float>;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
-  _B->sum(*alpha,
+  _B->sum(static_cast<F>(*alpha),
           *_A,
           idx_A,
-          *beta,
+          static_cast<F>(*beta),
           idx_B);
  }
 void tensor_sum_z(_Complex double const * alpha,
@@ -1153,10 +1178,10 @@ void tensor_sum_z(_Complex double const * alpha,
   using F = std::complex<double>;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
-  _B->sum(*alpha,
+  _B->sum(static_cast<F>(*alpha),
           *_A,
           idx_A,
-          *beta,
+          static_cast<F>(*beta),
           idx_B);
  }
 #+end_src
@@ -1420,7 +1445,6 @@ int main(int argc, char **argv) {
 *** Simple contraction
 
 #+begin_src c :tangle templates/test-simple-contraction.c 
-#line 1 "simple-contraction-org-src"
 {
 
   LOG("%ld) Running [36m'Simple Test'[0m for [33m*_@FIELD_NAME@[0m functions\n",
@@ -1429,9 +1453,9 @@ int main(int argc, char **argv) {
   tensor_h A = 0x0, B = 0x0, C = 0x0;
 
   size_t
-    lens_A[] = {20, 20, 30}, dim_A = 3,
-    lens_B[] = {30, 20}, dim_B = 2,
-    lens_C[] = {20}, dim_C = 1;
+    lens_A[] = {20UL, 20UL, 30UL}, dim_A = 3,
+    lens_B[] = {30UL, 20UL}, dim_B = 2,
+    lens_C[] = {20UL}, dim_C = 1;
 
   double
     norm_A,
@@ -1492,7 +1516,6 @@ int main(int argc, char **argv) {
 #+RESULTS:
 :results:
 #+begin_src c :tangle test.c
-#line 1 "simple-contraction-org-src"
 {
 
   LOG("%ld) Running [36m'Simple Test'[0m for [33m*_s[0m functions\n",
@@ -1501,9 +1524,9 @@ int main(int argc, char **argv) {
   tensor_h A = 0x0, B = 0x0, C = 0x0;
 
   size_t
-    lens_A[] = {20, 20, 30}, dim_A = 3,
-    lens_B[] = {30, 20}, dim_B = 2,
-    lens_C[] = {20}, dim_C = 1;
+    lens_A[] = {20UL, 20UL, 30UL}, dim_A = 3,
+    lens_B[] = {30UL, 20UL}, dim_B = 2,
+    lens_C[] = {20UL}, dim_C = 1;
 
   double
     norm_A,
@@ -1555,7 +1578,6 @@ int main(int argc, char **argv) {
   tensor_free_s(B);
   tensor_free_s(C);
 }
-#line 1 "simple-contraction-org-src"
 {
 
   LOG("%ld) Running [36m'Simple Test'[0m for [33m*_d[0m functions\n",
@@ -1564,9 +1586,9 @@ int main(int argc, char **argv) {
   tensor_h A = 0x0, B = 0x0, C = 0x0;
 
   size_t
-    lens_A[] = {20, 20, 30}, dim_A = 3,
-    lens_B[] = {30, 20}, dim_B = 2,
-    lens_C[] = {20}, dim_C = 1;
+    lens_A[] = {20UL, 20UL, 30UL}, dim_A = 3,
+    lens_B[] = {30UL, 20UL}, dim_B = 2,
+    lens_C[] = {20UL}, dim_C = 1;
 
   double
     norm_A,
@@ -1618,7 +1640,6 @@ int main(int argc, char **argv) {
   tensor_free_d(B);
   tensor_free_d(C);
 }
-#line 1 "simple-contraction-org-src"
 {
 
   LOG("%ld) Running [36m'Simple Test'[0m for [33m*_c[0m functions\n",
@@ -1627,9 +1648,9 @@ int main(int argc, char **argv) {
   tensor_h A = 0x0, B = 0x0, C = 0x0;
 
   size_t
-    lens_A[] = {20, 20, 30}, dim_A = 3,
-    lens_B[] = {30, 20}, dim_B = 2,
-    lens_C[] = {20}, dim_C = 1;
+    lens_A[] = {20UL, 20UL, 30UL}, dim_A = 3,
+    lens_B[] = {30UL, 20UL}, dim_B = 2,
+    lens_C[] = {20UL}, dim_C = 1;
 
   double
     norm_A,
@@ -1681,7 +1702,6 @@ int main(int argc, char **argv) {
   tensor_free_c(B);
   tensor_free_c(C);
 }
-#line 1 "simple-contraction-org-src"
 {
 
   LOG("%ld) Running [36m'Simple Test'[0m for [33m*_z[0m functions\n",
@@ -1690,9 +1710,9 @@ int main(int argc, char **argv) {
   tensor_h A = 0x0, B = 0x0, C = 0x0;
 
   size_t
-    lens_A[] = {20, 20, 30}, dim_A = 3,
-    lens_B[] = {30, 20}, dim_B = 2,
-    lens_C[] = {20}, dim_C = 1;
+    lens_A[] = {20UL, 20UL, 30UL}, dim_A = 3,
+    lens_B[] = {30UL, 20UL}, dim_B = 2,
+    lens_C[] = {20UL}, dim_C = 1;
 
   double
     norm_A,

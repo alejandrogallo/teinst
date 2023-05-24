@@ -9,14 +9,16 @@ CTF_LIBS = $(CTF_PATH)/lib/libctf.a -lopenblas -lscalapack
 .PHONY: all test
 all: libteinst.so test
 
+c-test: libteinst.so
+c-test: test.c
+	mpicc -O0 -g -I. $(CXXFLAGS) test.c -o c-test -L. -lteinst
+
 test: c-test
 	./c-test
 	mpirun -np 4 ./c-test
 
-c-test: test.c libteinst.so
-	mpicc -O0 -g -I. $(CXXFLAGS) test.c -o c-test -L. -lteinst
-
 teinst.cxx: teinst.h
+teinst.cxx: readme.org
 teinst.h: readme.org
 	emacs --batch -Q readme.org --load build.el
 
