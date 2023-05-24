@@ -569,6 +569,233 @@ void tensor_name(tensor_h t, char** nameptr)
 #+end_src
 
 
+** =tensor_fill_random=
+
+*** Implementation
+
+#+begin_src c++ :noweb-ref tensor-fill-random-header :tangle templates/tensor_fill_random.h 
+void tensor_fill_random_@FIELD_NAME@(tensor_h const A,
+                                  @FIELD_CTYPE@ const * f_min,
+                                  @FIELD_CTYPE@ const * f_max)
+#+end_src
+
+#+begin_src c++ :tangle templates/tensor_fill_random.cxx 
+<<tensor-fill-random-header>> {
+  using F = @FIELD_TYPE@;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  _A->fill_random(*f_min, *f_max);
+ }
+#+end_src
+
+#+begin_src lisp :tangle templates/tensor_fill_random.lisp
+(defcfun ("tensor_fill_random_@FIELD_NAME@" %tensor-fill-random-@FIELD_NAME@)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+#+end_src
+
+*** Instantiation
+
+**** Header
+
+#+call: instantiate-header(in="tensor_fill_random.h", tangle="teinst.h")
+
+#+RESULTS:
+:results:
+#+begin_src c++ :tangle teinst.h
+void tensor_fill_random_s(tensor_h const A,
+                                  float const * f_min,
+                                  float const * f_max);
+void tensor_fill_random_d(tensor_h const A,
+                                  double const * f_min,
+                                  double const * f_max);
+void tensor_fill_random_c(tensor_h const A,
+                                  _Complex float const * f_min,
+                                  _Complex float const * f_max);
+void tensor_fill_random_z(tensor_h const A,
+                                  _Complex double const * f_min,
+                                  _Complex double const * f_max);
+#+end_src
+:end:
+
+**** Implementation
+
+#+call: instantiate-template(in="tensor_fill_random.cxx", tangle="teinst.cxx")
+
+#+RESULTS:
+:results:
+#+begin_src c++ :tangle teinst.cxx
+void tensor_fill_random_s(tensor_h const A,
+                                  float const * f_min,
+                                  float const * f_max) {
+  using F = float;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  _A->fill_random(*f_min, *f_max);
+ }
+void tensor_fill_random_d(tensor_h const A,
+                                  double const * f_min,
+                                  double const * f_max) {
+  using F = double;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  _A->fill_random(*f_min, *f_max);
+ }
+void tensor_fill_random_c(tensor_h const A,
+                                  _Complex float const * f_min,
+                                  _Complex float const * f_max) {
+  using F = std::complex<float>;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  _A->fill_random(*f_min, *f_max);
+ }
+void tensor_fill_random_z(tensor_h const A,
+                                  _Complex double const * f_min,
+                                  _Complex double const * f_max) {
+  using F = std::complex<double>;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  _A->fill_random(*f_min, *f_max);
+ }
+#+end_src
+:end:
+
+**** Lisp
+
+#+call: instantiate-template(in="tensor_fill_random.lisp", tangle="cffi.lisp", lang="lisp")
+
+#+RESULTS:
+:results:
+#+begin_src lisp :tangle cffi.lisp
+(defcfun ("tensor_fill_random_s" %tensor-fill-random-s)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+(defcfun ("tensor_fill_random_d" %tensor-fill-random-d)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+(defcfun ("tensor_fill_random_c" %tensor-fill-random-c)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+(defcfun ("tensor_fill_random_z" %tensor-fill-random-z)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+#+end_src
+:end:
+
+** =tensor_norm_frobenius=
+
+*** Implementation
+
+#+begin_src c++ :noweb-ref tensor-norm-frobenius-header :tangle templates/tensor_norm_frobenius.h 
+void tensor_norm_frobenius_@FIELD_NAME@(tensor_h const A,
+                                        double * norm)
+#+end_src
+
+#+begin_src c++ :tangle templates/tensor_norm_frobenius.cxx 
+<<tensor-norm-frobenius-header>> {
+  using F = @FIELD_TYPE@;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  *norm = _A->norm2();
+ }
+#+end_src
+
+#+begin_src lisp :tangle templates/tensor_norm_frobenius.lisp
+(defcfun ("tensor_norm_frobenius_@FIELD_NAME@" %tensor-norm-frobenius-@FIELD_NAME@)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+#+end_src
+
+*** Instantiation
+
+**** Header
+
+#+call: instantiate-header(in="tensor_norm_frobenius.h", tangle="teinst.h")
+
+#+RESULTS:
+:results:
+#+begin_src c++ :tangle teinst.h
+void tensor_norm_frobenius_s(tensor_h const A,
+                                        double * norm);
+void tensor_norm_frobenius_d(tensor_h const A,
+                                        double * norm);
+void tensor_norm_frobenius_c(tensor_h const A,
+                                        double * norm);
+void tensor_norm_frobenius_z(tensor_h const A,
+                                        double * norm);
+#+end_src
+:end:
+
+**** Implementation
+
+#+call: instantiate-template(in="tensor_norm_frobenius.cxx", tangle="teinst.cxx")
+
+#+RESULTS:
+:results:
+#+begin_src c++ :tangle teinst.cxx
+void tensor_norm_frobenius_s(tensor_h const A,
+                                        double * norm) {
+  using F = float;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  *norm = _A->norm2();
+ }
+void tensor_norm_frobenius_d(tensor_h const A,
+                                        double * norm) {
+  using F = double;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  *norm = _A->norm2();
+ }
+void tensor_norm_frobenius_c(tensor_h const A,
+                                        double * norm) {
+  using F = std::complex<float>;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  *norm = _A->norm2();
+ }
+void tensor_norm_frobenius_z(tensor_h const A,
+                                        double * norm) {
+  using F = std::complex<double>;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  *norm = _A->norm2();
+ }
+#+end_src
+:end:
+
+**** Lisp
+
+#+call: instantiate-template(in="tensor_norm_frobenius.lisp", tangle="cffi.lisp", lang="lisp")
+
+#+RESULTS:
+:results:
+#+begin_src lisp :tangle cffi.lisp
+(defcfun ("tensor_norm_frobenius_s" %tensor-norm-frobenius-s)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+(defcfun ("tensor_norm_frobenius_d" %tensor-norm-frobenius-d)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+(defcfun ("tensor_norm_frobenius_c" %tensor-norm-frobenius-c)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+(defcfun ("tensor_norm_frobenius_z" %tensor-norm-frobenius-z)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+#+end_src
+:end:
+
 ** =tensor_contract=
 
 *** Implementation
@@ -580,8 +807,8 @@ void tensor_contract_@FIELD_NAME@(@FIELD_CTYPE@ const * alpha,
                                   tensor_h const B,
                                   char const * idx_B,
                                   @FIELD_CTYPE@ const * beta,
-                                  char const * idx_C,
-                                  tensor_h C)
+                                  tensor_h C,
+                                  char const * idx_C)
 #+end_src
 
 #+begin_src c++ :tangle templates/tensor_contract.cxx 
@@ -628,32 +855,32 @@ void tensor_contract_s(float const * alpha,
                                   tensor_h const B,
                                   char const * idx_B,
                                   float const * beta,
-                                  char const * idx_C,
-                                  tensor_h C);
+                                  tensor_h C,
+                                  char const * idx_C);
 void tensor_contract_d(double const * alpha,
                                   tensor_h const A,
                                   char const * idx_A,
                                   tensor_h const B,
                                   char const * idx_B,
                                   double const * beta,
-                                  char const * idx_C,
-                                  tensor_h C);
+                                  tensor_h C,
+                                  char const * idx_C);
 void tensor_contract_c(_Complex float const * alpha,
                                   tensor_h const A,
                                   char const * idx_A,
                                   tensor_h const B,
                                   char const * idx_B,
                                   _Complex float const * beta,
-                                  char const * idx_C,
-                                  tensor_h C);
+                                  tensor_h C,
+                                  char const * idx_C);
 void tensor_contract_z(_Complex double const * alpha,
                                   tensor_h const A,
                                   char const * idx_A,
                                   tensor_h const B,
                                   char const * idx_B,
                                   _Complex double const * beta,
-                                  char const * idx_C,
-                                  tensor_h C);
+                                  tensor_h C,
+                                  char const * idx_C);
 #+end_src
 :end:
 
@@ -670,8 +897,8 @@ void tensor_contract_s(float const * alpha,
                                   tensor_h const B,
                                   char const * idx_B,
                                   float const * beta,
-                                  char const * idx_C,
-                                  tensor_h C) {
+                                  tensor_h C,
+                                  char const * idx_C) {
   using F = float;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
@@ -690,8 +917,8 @@ void tensor_contract_d(double const * alpha,
                                   tensor_h const B,
                                   char const * idx_B,
                                   double const * beta,
-                                  char const * idx_C,
-                                  tensor_h C) {
+                                  tensor_h C,
+                                  char const * idx_C) {
   using F = double;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
@@ -710,8 +937,8 @@ void tensor_contract_c(_Complex float const * alpha,
                                   tensor_h const B,
                                   char const * idx_B,
                                   _Complex float const * beta,
-                                  char const * idx_C,
-                                  tensor_h C) {
+                                  tensor_h C,
+                                  char const * idx_C) {
   using F = std::complex<float>;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
@@ -730,8 +957,8 @@ void tensor_contract_z(_Complex double const * alpha,
                                   tensor_h const B,
                                   char const * idx_B,
                                   _Complex double const * beta,
-                                  char const * idx_C,
-                                  tensor_h C) {
+                                  tensor_h C,
+                                  char const * idx_C) {
   using F = std::complex<double>;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
@@ -789,6 +1016,186 @@ void tensor_contract_z(_Complex double const * alpha,
   (beta :pointer)
   (idx_C :string)
   (C tensor-h))
+#+end_src
+:end:
+
+** =tensor_sum=
+
+*** Implementation
+
+#+begin_src c++ :noweb-ref tensor-sum-header :tangle templates/tensor_sum.h 
+void tensor_sum_@FIELD_NAME@(@FIELD_CTYPE@ const * alpha,
+                             tensor_h const A,
+                             char const * idx_A,
+                             @FIELD_CTYPE@ const * beta,
+                             tensor_h const B,
+                             char const * idx_B)
+#+end_src
+
+#+begin_src c++ :tangle templates/tensor_sum.cxx 
+<<tensor-sum-header>> {
+  using F = @FIELD_TYPE@;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
+  _B->sum(*alpha,
+          ,*_A,
+          idx_A,
+          ,*beta,
+          idx_B);
+ }
+#+end_src
+
+#+begin_src lisp :tangle templates/tensor_sum.lisp
+(defcfun ("tensor_sum_@FIELD_NAME@" %tensor-sum-@FIELD_NAME@) :void
+  (alpha :pointer)
+  (A tensor-h)
+  (idx_A :string)
+  (beta :pointer)
+  (B tensor-h)
+  (idx_B :string))
+#+end_src
+
+
+*** Instantiation
+
+**** Header
+
+#+call: instantiate-header(in="tensor_sum.h", tangle="teinst.h")
+
+#+RESULTS:
+:results:
+#+begin_src c++ :tangle teinst.h
+void tensor_sum_s(float const * alpha,
+                             tensor_h const A,
+                             char const * idx_A,
+                             float const * beta,
+                             tensor_h const B,
+                             char const * idx_B);
+void tensor_sum_d(double const * alpha,
+                             tensor_h const A,
+                             char const * idx_A,
+                             double const * beta,
+                             tensor_h const B,
+                             char const * idx_B);
+void tensor_sum_c(_Complex float const * alpha,
+                             tensor_h const A,
+                             char const * idx_A,
+                             _Complex float const * beta,
+                             tensor_h const B,
+                             char const * idx_B);
+void tensor_sum_z(_Complex double const * alpha,
+                             tensor_h const A,
+                             char const * idx_A,
+                             _Complex double const * beta,
+                             tensor_h const B,
+                             char const * idx_B);
+#+end_src
+:end:
+
+**** Implementation
+
+#+call: instantiate-template(in="tensor_sum.cxx", tangle="teinst.cxx")
+
+#+RESULTS:
+:results:
+#+begin_src c++ :tangle teinst.cxx
+void tensor_sum_s(float const * alpha,
+                             tensor_h const A,
+                             char const * idx_A,
+                             float const * beta,
+                             tensor_h const B,
+                             char const * idx_B) {
+  using F = float;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
+  _B->sum(*alpha,
+          *_A,
+          idx_A,
+          *beta,
+          idx_B);
+ }
+void tensor_sum_d(double const * alpha,
+                             tensor_h const A,
+                             char const * idx_A,
+                             double const * beta,
+                             tensor_h const B,
+                             char const * idx_B) {
+  using F = double;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
+  _B->sum(*alpha,
+          *_A,
+          idx_A,
+          *beta,
+          idx_B);
+ }
+void tensor_sum_c(_Complex float const * alpha,
+                             tensor_h const A,
+                             char const * idx_A,
+                             _Complex float const * beta,
+                             tensor_h const B,
+                             char const * idx_B) {
+  using F = std::complex<float>;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
+  _B->sum(*alpha,
+          *_A,
+          idx_A,
+          *beta,
+          idx_B);
+ }
+void tensor_sum_z(_Complex double const * alpha,
+                             tensor_h const A,
+                             char const * idx_A,
+                             _Complex double const * beta,
+                             tensor_h const B,
+                             char const * idx_B) {
+  using F = std::complex<double>;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
+  _B->sum(*alpha,
+          *_A,
+          idx_A,
+          *beta,
+          idx_B);
+ }
+#+end_src
+:end:
+
+**** Lisp
+#+call: instantiate-template(in="tensor_sum.lisp", tangle="cffi.lisp", lang="lisp")
+
+#+RESULTS:
+:results:
+#+begin_src lisp :tangle cffi.lisp
+(defcfun ("tensor_sum_s" %tensor-sum-s) :void
+  (alpha :pointer)
+  (A tensor-h)
+  (idx_A :string)
+  (beta :pointer)
+  (B tensor-h)
+  (idx_B :string))
+(defcfun ("tensor_sum_d" %tensor-sum-d) :void
+  (alpha :pointer)
+  (A tensor-h)
+  (idx_A :string)
+  (beta :pointer)
+  (B tensor-h)
+  (idx_B :string))
+(defcfun ("tensor_sum_c" %tensor-sum-c) :void
+  (alpha :pointer)
+  (A tensor-h)
+  (idx_A :string)
+  (beta :pointer)
+  (B tensor-h)
+  (idx_B :string))
+(defcfun ("tensor_sum_z" %tensor-sum-z) :void
+  (alpha :pointer)
+  (A tensor-h)
+  (idx_A :string)
+  (beta :pointer)
+  (B tensor-h)
+  (idx_B :string))
 #+end_src
 :end:
 
@@ -1026,15 +1433,39 @@ int main(int argc, char **argv) {
     lens_B[] = {30, 20}, dim_B = 2,
     lens_C[] = {20}, dim_C = 1;
 
-  @FIELD_CTYPE@
-    alpha = { 1 },
-    beta = { 0 };
+  double
+    norm_A,
+    norm_B,
+    norm_C;
 
+  @FIELD_CTYPE@
+    alpha = 1,
+    beta = 0;
+
+  // init tensors
   assert(A == 0x0); assert(B == 0x0); assert(C == 0x0);
   tensor_init_@FIELD_NAME@(&A, dim_A, lens_A);
   tensor_init_@FIELD_NAME@(&B, dim_B, lens_B);
   tensor_init_@FIELD_NAME@(&C, dim_C, lens_C);
   assert(A != 0x0); assert(B != 0x0); assert(C != 0x0);
+  LOG("\t- Inited tensors A<%p> B<%p> C<%p>\n",
+      (void*)A, (void*)B, (void*)C);
+
+  LOG("\t- Random filling\n");
+  @FIELD_CTYPE@ f_min = 0, f_max = 1;
+  tensor_fill_random_@FIELD_NAME@(A, &f_min, &f_max);
+  tensor_fill_random_@FIELD_NAME@(B, &f_min, &f_max);
+  tensor_fill_random_@FIELD_NAME@(C, &f_min, &f_max);
+
+  tensor_norm_frobenius_@FIELD_NAME@(A, &norm_A);
+  tensor_norm_frobenius_@FIELD_NAME@(B, &norm_B);
+  tensor_norm_frobenius_@FIELD_NAME@(C, &norm_C);
+  LOG("\t- Norms A<%f> B<%f> C<%f>\n",
+      norm_A, norm_B, norm_C);
+
+  LOG("\t- Summing A[abc] += 2 * A[abc]\n");
+  @FIELD_CTYPE@ two = 2, zero = 0;
+  tensor_sum_@FIELD_NAME@(&two, A, "abc", &zero, A, "abc");
 
   LOG("\t- Contracting C[a] = A[abc] * B[cb]\n");
   tensor_contract_@FIELD_NAME@(&alpha,
@@ -1043,11 +1474,18 @@ int main(int argc, char **argv) {
                                B,
                                "cb",
                                &beta,
-                               "a",
-                               C);
+                               C,
+                               "a");
 
+
+  LOG("\t- Freeing tensors\n");
+  tensor_free_@FIELD_NAME@(A);
+  tensor_free_@FIELD_NAME@(B);
+  tensor_free_@FIELD_NAME@(C);
 }
 #+end_src
+
+**** Instantiation
 
 #+call: instantiate-template(in="test-simple-contraction.c", tangle="test.c", lang="c")
 
@@ -1067,15 +1505,39 @@ int main(int argc, char **argv) {
     lens_B[] = {30, 20}, dim_B = 2,
     lens_C[] = {20}, dim_C = 1;
 
-  float
-    alpha = { 1 },
-    beta = { 0 };
+  double
+    norm_A,
+    norm_B,
+    norm_C;
 
+  float
+    alpha = 1,
+    beta = 0;
+
+  // init tensors
   assert(A == 0x0); assert(B == 0x0); assert(C == 0x0);
   tensor_init_s(&A, dim_A, lens_A);
   tensor_init_s(&B, dim_B, lens_B);
   tensor_init_s(&C, dim_C, lens_C);
   assert(A != 0x0); assert(B != 0x0); assert(C != 0x0);
+  LOG("\t- Inited tensors A<%p> B<%p> C<%p>\n",
+      (void*)A, (void*)B, (void*)C);
+
+  LOG("\t- Random filling\n");
+  float f_min = 0, f_max = 1;
+  tensor_fill_random_s(A, &f_min, &f_max);
+  tensor_fill_random_s(B, &f_min, &f_max);
+  tensor_fill_random_s(C, &f_min, &f_max);
+
+  tensor_norm_frobenius_s(A, &norm_A);
+  tensor_norm_frobenius_s(B, &norm_B);
+  tensor_norm_frobenius_s(C, &norm_C);
+  LOG("\t- Norms A<%f> B<%f> C<%f>\n",
+      norm_A, norm_B, norm_C);
+
+  LOG("\t- Summing A[abc] += 2 * A[abc]\n");
+  float two = 2, zero = 0;
+  tensor_sum_s(&two, A, "abc", &zero, A, "abc");
 
   LOG("\t- Contracting C[a] = A[abc] * B[cb]\n");
   tensor_contract_s(&alpha,
@@ -1084,9 +1546,14 @@ int main(int argc, char **argv) {
                                B,
                                "cb",
                                &beta,
-                               "a",
-                               C);
+                               C,
+                               "a");
 
+
+  LOG("\t- Freeing tensors\n");
+  tensor_free_s(A);
+  tensor_free_s(B);
+  tensor_free_s(C);
 }
 #line 1 "simple-contraction-org-src"
 {
@@ -1102,14 +1569,38 @@ int main(int argc, char **argv) {
     lens_C[] = {20}, dim_C = 1;
 
   double
-    alpha = { 1 },
-    beta = { 0 };
+    norm_A,
+    norm_B,
+    norm_C;
 
+  double
+    alpha = 1,
+    beta = 0;
+
+  // init tensors
   assert(A == 0x0); assert(B == 0x0); assert(C == 0x0);
   tensor_init_d(&A, dim_A, lens_A);
   tensor_init_d(&B, dim_B, lens_B);
   tensor_init_d(&C, dim_C, lens_C);
   assert(A != 0x0); assert(B != 0x0); assert(C != 0x0);
+  LOG("\t- Inited tensors A<%p> B<%p> C<%p>\n",
+      (void*)A, (void*)B, (void*)C);
+
+  LOG("\t- Random filling\n");
+  double f_min = 0, f_max = 1;
+  tensor_fill_random_d(A, &f_min, &f_max);
+  tensor_fill_random_d(B, &f_min, &f_max);
+  tensor_fill_random_d(C, &f_min, &f_max);
+
+  tensor_norm_frobenius_d(A, &norm_A);
+  tensor_norm_frobenius_d(B, &norm_B);
+  tensor_norm_frobenius_d(C, &norm_C);
+  LOG("\t- Norms A<%f> B<%f> C<%f>\n",
+      norm_A, norm_B, norm_C);
+
+  LOG("\t- Summing A[abc] += 2 * A[abc]\n");
+  double two = 2, zero = 0;
+  tensor_sum_d(&two, A, "abc", &zero, A, "abc");
 
   LOG("\t- Contracting C[a] = A[abc] * B[cb]\n");
   tensor_contract_d(&alpha,
@@ -1118,9 +1609,14 @@ int main(int argc, char **argv) {
                                B,
                                "cb",
                                &beta,
-                               "a",
-                               C);
+                               C,
+                               "a");
 
+
+  LOG("\t- Freeing tensors\n");
+  tensor_free_d(A);
+  tensor_free_d(B);
+  tensor_free_d(C);
 }
 #line 1 "simple-contraction-org-src"
 {
@@ -1135,15 +1631,39 @@ int main(int argc, char **argv) {
     lens_B[] = {30, 20}, dim_B = 2,
     lens_C[] = {20}, dim_C = 1;
 
-  _Complex float
-    alpha = { 1 },
-    beta = { 0 };
+  double
+    norm_A,
+    norm_B,
+    norm_C;
 
+  _Complex float
+    alpha = 1,
+    beta = 0;
+
+  // init tensors
   assert(A == 0x0); assert(B == 0x0); assert(C == 0x0);
   tensor_init_c(&A, dim_A, lens_A);
   tensor_init_c(&B, dim_B, lens_B);
   tensor_init_c(&C, dim_C, lens_C);
   assert(A != 0x0); assert(B != 0x0); assert(C != 0x0);
+  LOG("\t- Inited tensors A<%p> B<%p> C<%p>\n",
+      (void*)A, (void*)B, (void*)C);
+
+  LOG("\t- Random filling\n");
+  _Complex float f_min = 0, f_max = 1;
+  tensor_fill_random_c(A, &f_min, &f_max);
+  tensor_fill_random_c(B, &f_min, &f_max);
+  tensor_fill_random_c(C, &f_min, &f_max);
+
+  tensor_norm_frobenius_c(A, &norm_A);
+  tensor_norm_frobenius_c(B, &norm_B);
+  tensor_norm_frobenius_c(C, &norm_C);
+  LOG("\t- Norms A<%f> B<%f> C<%f>\n",
+      norm_A, norm_B, norm_C);
+
+  LOG("\t- Summing A[abc] += 2 * A[abc]\n");
+  _Complex float two = 2, zero = 0;
+  tensor_sum_c(&two, A, "abc", &zero, A, "abc");
 
   LOG("\t- Contracting C[a] = A[abc] * B[cb]\n");
   tensor_contract_c(&alpha,
@@ -1152,9 +1672,14 @@ int main(int argc, char **argv) {
                                B,
                                "cb",
                                &beta,
-                               "a",
-                               C);
+                               C,
+                               "a");
 
+
+  LOG("\t- Freeing tensors\n");
+  tensor_free_c(A);
+  tensor_free_c(B);
+  tensor_free_c(C);
 }
 #line 1 "simple-contraction-org-src"
 {
@@ -1169,15 +1694,39 @@ int main(int argc, char **argv) {
     lens_B[] = {30, 20}, dim_B = 2,
     lens_C[] = {20}, dim_C = 1;
 
-  _Complex double
-    alpha = { 1 },
-    beta = { 0 };
+  double
+    norm_A,
+    norm_B,
+    norm_C;
 
+  _Complex double
+    alpha = 1,
+    beta = 0;
+
+  // init tensors
   assert(A == 0x0); assert(B == 0x0); assert(C == 0x0);
   tensor_init_z(&A, dim_A, lens_A);
   tensor_init_z(&B, dim_B, lens_B);
   tensor_init_z(&C, dim_C, lens_C);
   assert(A != 0x0); assert(B != 0x0); assert(C != 0x0);
+  LOG("\t- Inited tensors A<%p> B<%p> C<%p>\n",
+      (void*)A, (void*)B, (void*)C);
+
+  LOG("\t- Random filling\n");
+  _Complex double f_min = 0, f_max = 1;
+  tensor_fill_random_z(A, &f_min, &f_max);
+  tensor_fill_random_z(B, &f_min, &f_max);
+  tensor_fill_random_z(C, &f_min, &f_max);
+
+  tensor_norm_frobenius_z(A, &norm_A);
+  tensor_norm_frobenius_z(B, &norm_B);
+  tensor_norm_frobenius_z(C, &norm_C);
+  LOG("\t- Norms A<%f> B<%f> C<%f>\n",
+      norm_A, norm_B, norm_C);
+
+  LOG("\t- Summing A[abc] += 2 * A[abc]\n");
+  _Complex double two = 2, zero = 0;
+  tensor_sum_z(&two, A, "abc", &zero, A, "abc");
 
   LOG("\t- Contracting C[a] = A[abc] * B[cb]\n");
   tensor_contract_z(&alpha,
@@ -1186,9 +1735,14 @@ int main(int argc, char **argv) {
                                B,
                                "cb",
                                &beta,
-                               "a",
-                               C);
+                               C,
+                               "a");
 
+
+  LOG("\t- Freeing tensors\n");
+  tensor_free_z(A);
+  tensor_free_z(B);
+  tensor_free_z(C);
 }
 #+end_src
 :end:

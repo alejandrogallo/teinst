@@ -156,14 +156,68 @@ void tensor_name(tensor_h t, char** nameptr) {
     memcpy(*nameptr, name.c_str(), name.size());
 }
 
+void tensor_fill_random_s(tensor_h const A,
+                                  float const * f_min,
+                                  float const * f_max) {
+  using F = float;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  _A->fill_random(*f_min, *f_max);
+ }
+void tensor_fill_random_d(tensor_h const A,
+                                  double const * f_min,
+                                  double const * f_max) {
+  using F = double;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  _A->fill_random(*f_min, *f_max);
+ }
+void tensor_fill_random_c(tensor_h const A,
+                                  _Complex float const * f_min,
+                                  _Complex float const * f_max) {
+  using F = std::complex<float>;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  _A->fill_random(*f_min, *f_max);
+ }
+void tensor_fill_random_z(tensor_h const A,
+                                  _Complex double const * f_min,
+                                  _Complex double const * f_max) {
+  using F = std::complex<double>;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  _A->fill_random(*f_min, *f_max);
+ }
+
+void tensor_norm_frobenius_s(tensor_h const A,
+                                        double * norm) {
+  using F = float;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  *norm = _A->norm2();
+ }
+void tensor_norm_frobenius_d(tensor_h const A,
+                                        double * norm) {
+  using F = double;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  *norm = _A->norm2();
+ }
+void tensor_norm_frobenius_c(tensor_h const A,
+                                        double * norm) {
+  using F = std::complex<float>;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  *norm = _A->norm2();
+ }
+void tensor_norm_frobenius_z(tensor_h const A,
+                                        double * norm) {
+  using F = std::complex<double>;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  *norm = _A->norm2();
+ }
+
 void tensor_contract_s(float const * alpha,
                                   tensor_h const A,
                                   char const * idx_A,
                                   tensor_h const B,
                                   char const * idx_B,
                                   float const * beta,
-                                  char const * idx_C,
-                                  tensor_h C) {
+                                  tensor_h C,
+                                  char const * idx_C) {
   using F = float;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
@@ -182,8 +236,8 @@ void tensor_contract_d(double const * alpha,
                                   tensor_h const B,
                                   char const * idx_B,
                                   double const * beta,
-                                  char const * idx_C,
-                                  tensor_h C) {
+                                  tensor_h C,
+                                  char const * idx_C) {
   using F = double;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
@@ -202,8 +256,8 @@ void tensor_contract_c(_Complex float const * alpha,
                                   tensor_h const B,
                                   char const * idx_B,
                                   _Complex float const * beta,
-                                  char const * idx_C,
-                                  tensor_h C) {
+                                  tensor_h C,
+                                  char const * idx_C) {
   using F = std::complex<float>;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
@@ -222,8 +276,8 @@ void tensor_contract_z(_Complex double const * alpha,
                                   tensor_h const B,
                                   char const * idx_B,
                                   _Complex double const * beta,
-                                  char const * idx_C,
-                                  tensor_h C) {
+                                  tensor_h C,
+                                  char const * idx_C) {
   using F = std::complex<double>;
   auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
   auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
@@ -235,6 +289,67 @@ void tensor_contract_z(_Complex double const * alpha,
                idx_B,
                *beta,
                idx_C);
+ }
+
+void tensor_sum_s(float const * alpha,
+                             tensor_h const A,
+                             char const * idx_A,
+                             float const * beta,
+                             tensor_h const B,
+                             char const * idx_B) {
+  using F = float;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
+  _B->sum(*alpha,
+          *_A,
+          idx_A,
+          *beta,
+          idx_B);
+ }
+void tensor_sum_d(double const * alpha,
+                             tensor_h const A,
+                             char const * idx_A,
+                             double const * beta,
+                             tensor_h const B,
+                             char const * idx_B) {
+  using F = double;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
+  _B->sum(*alpha,
+          *_A,
+          idx_A,
+          *beta,
+          idx_B);
+ }
+void tensor_sum_c(_Complex float const * alpha,
+                             tensor_h const A,
+                             char const * idx_A,
+                             _Complex float const * beta,
+                             tensor_h const B,
+                             char const * idx_B) {
+  using F = std::complex<float>;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
+  _B->sum(*alpha,
+          *_A,
+          idx_A,
+          *beta,
+          idx_B);
+ }
+void tensor_sum_z(_Complex double const * alpha,
+                             tensor_h const A,
+                             char const * idx_A,
+                             _Complex double const * beta,
+                             tensor_h const B,
+                             char const * idx_B) {
+  using F = std::complex<double>;
+  auto _A = reinterpret_cast<CTF::Tensor<F>*>(A);
+  auto _B = reinterpret_cast<CTF::Tensor<F>*>(B);
+  _B->sum(*alpha,
+          *_A,
+          idx_A,
+          *beta,
+          idx_B);
  }
 
 } // extern "C"

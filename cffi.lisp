@@ -79,6 +79,48 @@ has 3 dimensions.
   (tsr tensor-h)
   (name :pointer))
 
+(defcfun ("tensor_fill_random_s" %tensor-fill-random-s)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+(defcfun ("tensor_fill_random_d" %tensor-fill-random-d)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+(defcfun ("tensor_fill_random_c" %tensor-fill-random-c)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+(defcfun ("tensor_fill_random_z" %tensor-fill-random-z)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+
+(defcfun ("tensor_norm_frobenius_s" %tensor-norm-frobenius-s)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+(defcfun ("tensor_norm_frobenius_d" %tensor-norm-frobenius-d)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+(defcfun ("tensor_norm_frobenius_c" %tensor-norm-frobenius-c)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+(defcfun ("tensor_norm_frobenius_z" %tensor-norm-frobenius-z)
+    :void
+  (A tensor-h)
+  (min :pointer)
+  (max :pointer))
+
 (defcfun ("tensor_contract_s" %tensor-contract-s) :void
   (alpha :pointer)
   (A tensor-h)
@@ -115,3 +157,32 @@ has 3 dimensions.
   (beta :pointer)
   (idx_C :string)
   (C tensor-h))
+
+(defcfun ("tensor_sum_s" %tensor-sum-s) :void
+  (alpha :pointer)
+  (A tensor-h)
+  (idx_A :string)
+  (beta :pointer)
+  (B tensor-h)
+  (idx_B :string))
+(defcfun ("tensor_sum_d" %tensor-sum-d) :void
+  (alpha :pointer)
+  (A tensor-h)
+  (idx_A :string)
+  (beta :pointer)
+  (B tensor-h)
+  (idx_B :string))
+(defcfun ("tensor_sum_c" %tensor-sum-c) :void
+  (alpha :pointer)
+  (A tensor-h)
+  (idx_A :string)
+  (beta :pointer)
+  (B tensor-h)
+  (idx_B :string))
+(defcfun ("tensor_sum_z" %tensor-sum-z) :void
+  (alpha :pointer)
+  (A tensor-h)
+  (idx_A :string)
+  (beta :pointer)
+  (B tensor-h)
+  (idx_B :string))
