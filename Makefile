@@ -51,13 +51,17 @@ clean:
 	-rm teinst.h teinst.cxx
 
 
-BLAS_PATH := /opt/OpenBLAS/lib/
 ctf: $(CTF_PATH)/lib/libctf.a
+CTF_FLAGS = \
+	CXX="mpic++ -std=c++11 -fopenmp -O0 -g" \
+	LINKFLAGS="-L$(OPENBLAS_LD_LIBRARY_PATH) -lopenblas -L$(SCALAPACK_LD_LIBRARY_PATH) -lscalapack" \
+	LIBS="-L$(OPENBLAS_LD_LIBRARY_PATH) -lopenblas -L$(SCALAPACK_LD_LIBRARY_PATH) -lscalapack" \
+
 $(CTF_PATH)/lib/libctf.a:
 	mkdir -p $(CTF_PATH)
-	-git clone git@github.com:cc4s/ctf $(CTF_PATH)
-	cd $(CTF_PATH) && ./configure && \
-	$(MAKE) CXX="mpic++ -std=c++11 -fopenmp -O0 -g" LIBS="-L$(BLAS_PATH) -lopenblas -L$(SCALAPACK_PATH) -lscalapack"
+	-git clone --depth=1 git@github.com:cc4s/ctf $(CTF_PATH)
+	cd $(CTF_PATH) && bash ./configure $(CTF_FLAGS) && \
+	$(MAKE) 
 
 SCALAPACK_LIB = $(SCALAPACK_LD_LIBRARY_PATH)/libscalapack.so
 
