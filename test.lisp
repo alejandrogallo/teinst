@@ -30,3 +30,31 @@
                            'string)
           else
             do (push char chars))))
+
+(let ((^a (make-instance 'tensor
+                         :lengths '(10 20)
+                         :type :double-float))
+      (^b (make-instance 'tensor
+                         :lengths '(20 10)
+                         :type :double-float)))
+  (with-foreign-objects ((alpha :double)
+                         (beta :double))
+    (setf (mem-ref alpha :double) 1.0d0
+          (mem-ref beta :double) 5.0d0)
+    (with-slots ((%a handle)) ^a
+      (%tensor-fill-random-d %a beta alpha)
+      (with-foreign-object (norm :double)
+        (format t "~&norm A ~a" (mem-aref norm :double))
+        (%tensor-norm-frobenius-d %a norm)
+        (format t "~&norm A ~a" (mem-aref norm :double)))
+      (with-slots ((%b handle)) ^b
+        (%tensor-sum-d alpha
+                       %a
+                       "ab"
+                       beta
+                       %b
+                       "ba")))))
+
+
+(with-slots ((penis handle)) *tsr*
+  penis)
