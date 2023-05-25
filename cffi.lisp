@@ -103,23 +103,19 @@ has 3 dimensions.
 (defcfun ("tensor_norm_frobenius_s" %tensor-norm-frobenius-s)
     :void
   (A tensor-h)
-  (min :pointer)
-  (max :pointer))
+  (norm :pointer))
 (defcfun ("tensor_norm_frobenius_d" %tensor-norm-frobenius-d)
     :void
   (A tensor-h)
-  (min :pointer)
-  (max :pointer))
+  (norm :pointer))
 (defcfun ("tensor_norm_frobenius_c" %tensor-norm-frobenius-c)
     :void
   (A tensor-h)
-  (min :pointer)
-  (max :pointer))
+  (norm :pointer))
 (defcfun ("tensor_norm_frobenius_z" %tensor-norm-frobenius-z)
     :void
   (A tensor-h)
-  (min :pointer)
-  (max :pointer))
+  (norm :pointer))
 
 (defcfun ("tensor_contract_s" %tensor-contract-s) :void
   (alpha :pointer)
