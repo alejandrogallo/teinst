@@ -5,4 +5,4 @@
 
 (ql:quickload :teinst)
 (in-package :teinst)
-(init)
+;; (init)

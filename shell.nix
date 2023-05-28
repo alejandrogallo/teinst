@@ -4,8 +4,7 @@ let
 
   my-openblas = pkgs.openblas.override { blas64 = false; };
 
-in
-pkgs.mkShell rec {
+in pkgs.mkShell rec {
 
   buildInputs = with pkgs; [ clang-tools c2ffi ecl ccl gdb my-openblas ];
 
