@@ -39,9 +39,12 @@
 ;; (reload-foreign-libraries)
 
 (defun init ()
-  (mpi-init)
+  (mpi:mpi-init)
   (%global-world-init)
   t)
+
+(defun finalize ()
+  (mpi:mpi-finalize))
 
 
 #|

@@ -6,8 +6,7 @@
   :license  "Specify license here"
   :version "0.0.1"
   :serial t
-  :depends-on (#:cffi)
+  :depends-on (#:cffi #:cl-mpi)
   :components ((:file "package")
-               (:file "mpi")
                (:file "cffi")
                (:file "teinst")))

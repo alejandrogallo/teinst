@@ -1,3 +1,4 @@
+#|
 (in-package :teinst)
 
 (define-foreign-library libmpi (t (:default "libmpi")))
@@ -16,3 +17,4 @@
 (defcfun ("MPI_Comm_size" %mpi-comm-size) :void
   (world :int)
   (np (:pointer :int)))
+|#
