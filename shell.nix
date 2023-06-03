@@ -12,6 +12,8 @@ in pkgs.mkShell rec {
   OPENBLAS_LD_LIBRARY_PATH = "${my-openblas}/lib";
 
   nativeBuildInputs = with pkgs; [
+    autoconf
+    automake
     my-openblas
     scalapack
     # buildInputs.gfortran
