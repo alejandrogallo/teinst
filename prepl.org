@@ -1,3 +1,18 @@
 * Main ideas
 
-What should the programmer want from a parallel repl?
+What should the programmer want from a parallel REPL?
+
+- We want to be able to compile functions at least on one rank as we
+  were working with a normal serial REPL.
+
+- It is important to be able to run serial code in order to make
+  quick tests while developing.
+
+- It is also important to be able to run parallel code and test it
+  serially.
+
+- Whenever we want to run s-expressions in a parallel fashion, we
+  should be able to do this trivially.
+
+- If there is an error in some rank other than the root rank,
+  it is not realistic to be able to catch it.
