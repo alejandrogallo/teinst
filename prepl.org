@@ -1,0 +1,3 @@
+* Main ideas
+
+What should the programmer want from a parallel repl?
