@@ -2,3 +2,5 @@
 /c-test
 vendor/
 /result
+/.load.lisp.swn
+/v2.2.0
